@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
-import environ
+import environ, os
 
 env = environ.Env(SECRET_KEY=(str, 'asd123'))
 env.read_env()
@@ -56,7 +56,7 @@ ROOT_URLCONF = 'research_helper_app.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']
+        'DIRS': [os.path.join(BASE_DIR, 'users', 'template')]
         ,
         'APP_DIRS': True,
         'OPTIONS': {
