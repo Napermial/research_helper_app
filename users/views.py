@@ -6,13 +6,18 @@ from django.contrib.auth.decorators import login_required
 
 
 def index(request):
-    return render(request, "home.html", {})
+    return render(request, "home.html")
 
 
 @login_required
 def user(request, user_id):
     response = "You're looking at the profile of user %s."
-    return HttpResponse(response % user_id)
+    return render(request, "user.html")
+
+
+@login_required
+def researches(request):
+    return render(request, "user.html")
 
 
 def register(request):
