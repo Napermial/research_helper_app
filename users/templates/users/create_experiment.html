@@ -7,7 +7,10 @@
             $('[data-toggle="popover"]').popover({sanitize: false})
         });
         function addFactor(){
-            $("#FormSelectFactor1").append(new Option( $("#factorName").val() , "value")).selectpicker("refresh")
+            let selects = document.querySelectorAll("[id^='FormSelectFactor']")
+            console.log(selects)
+            selects.forEach(item => item.appendChild(new Option($("#factorName").val(), "value")))
+            //$(".root-for-factor").children().each().append(new Option( $("#factorName").val() , "value")).selectpicker("refresh")
         }
         function changeNumberOfFactors(){
             let numberOfSelects = $("#factor_number").val()
