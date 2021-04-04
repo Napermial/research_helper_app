@@ -11,24 +11,15 @@ def index(request):
 
 
 @login_required
-def user(request, user_id):
+def user(request):
     return render(request, "users/user.html")
 
 
 @login_required
-def researches(request):
+def experiments(request):
     return render(request, "users/user.html", {'n': range(20)})
 
 
-def login(request):
-    username = request.POST['username']
-    password = request.POST['password']
-    user_auth = authenticate(request, username=username, password=password)
-    if user_auth is not None:
-        login(request, user)
-    else:
-        return HttpResponse('no')
-
-
-def register(request):
-    return HttpResponse('start')
+@login_required
+def create_experiment(request):
+    return render(request, "users/create_experiment.html")
