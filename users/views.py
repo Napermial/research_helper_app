@@ -17,7 +17,7 @@ def user(request, user_id):
 
 @login_required
 def researches(request):
-    return render(request, "user.html")
+    return render(request, "user.html", {'n' : range(20) })
 
 
 def register(request):
