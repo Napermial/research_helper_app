@@ -20,7 +20,7 @@ def researches(request):
     return render(request, "users/user.html", {'n': range(20)})
 
 
-def login_view(request):
+def login(request):
     username = request.POST['username']
     password = request.POST['password']
     user_auth = authenticate(request, username=username, password=password)
@@ -28,11 +28,6 @@ def login_view(request):
         login(request, user)
     else:
         return HttpResponse('no')
-
-
-def logout_view(request):
-    logout(request)
-    return HttpResponse('logged out')
 
 
 def register(request):
