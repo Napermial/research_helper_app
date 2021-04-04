@@ -1,9 +1,11 @@
 {% extends "base.html" %}
-
+{% block title %}{% endblock %}
 {% block content %}
-
+    {% block navbar %}{% endblock %}
     {% if form.errors %}
-        <p>Your username and password didn't match. Please try again.</p>
+        <div class="alert alert-danger" role="alert">
+            Your username and password didn't match. Please try again.
+        </div>
     {% endif %}
 
     {% if next %}
@@ -28,11 +30,13 @@
             </tr>
         </table>
 
-        <input type="submit" value="login">
+        <input type="submit" class="btn btn-primary" value="login">
         <input type="hidden" name="next" value="{{ next }}">
     </form>
 
     {# Assumes you setup the password_reset view in your URLconf #}
-    <p><a href="{% url 'password_reset' %}">Lost password?</a></p>
+    <p><a class="btn btn-primary btn-lg btn-block" href="{% url 'password_reset' %}">Lost password?</a></p>
+    <a type="button" class="btn btn-primary btn-lg btn-block">Register</a>
+    <a type="button" class="btn btn-primary btn-lg btn-block" href="/">Home</a>
 
 {% endblock %}
