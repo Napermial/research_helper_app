@@ -29,7 +29,7 @@
                     </li>
                     <li class="nav-item">
                         <button type="button" class="btn btn-secondary"
-                                onclick='$.ajax("/auth/logout/", {type: "GET"});location.reload()'>logout
+                                onclick='$.ajax("/auth/logout/", {type: "GET"});window.location.href = "/" '>logout
                         </button>
                     </li>
                 {% else %}

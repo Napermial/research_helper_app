@@ -5,6 +5,9 @@
 {% block navbar  %}{{ block.super }}{% endblock %}
 {% block login_form %}(asd){% endblock %}
 {% block content %}
+    {% if user.is_authenticated %}
+        <button class="btn btn-secondary">Create new experiment</button>
+    {% endif %}
     <h1>Research helper</h1>
     <h4>lorem ipsum</h4>
 {% endblock %}

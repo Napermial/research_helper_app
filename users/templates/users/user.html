@@ -3,18 +3,18 @@
 {% block navbar %}{{ block.super }}{% endblock %}
 
 {% block content %}
-    <h1>My research</h1>
-    <button type="button" class="btn btn-secondary btn-lg">Create new research</button>
+    <h1>My experiments</h1>
+    <button type="button" class="btn btn-secondary btn-lg">Create new experiment</button>
     <div class="container-fluid">
         <div class="row">
             {% for elem in n %}
                 <div class="row">
                     <div class="card" style="width: 18rem;">
                         <div class="card-body">
-                            <h5 class="card-title">research_title </h5>
+                            <h5 class="card-title">experiment title </h5>
                             <h6 class="card-subtitle mb-2 text-muted">No. items:</h6>
                             <h6 class="card-subtitle mb-2 text-muted">No. fills:</h6>
-                            <a href="research/{{ 1 }}" class="card-link">Edit research</a>
+                            <a href="research/{{ 1 }}" class="card-link">Edit experiment</a>
                         </div>
                     </div>
                 </div>

@@ -17,10 +17,9 @@ class Level(models.Model):
         return self.name
 
 
-class Research(models.Model):
+class Experiment(models.Model):
     name = models.TextField()
     creation_date = models.DateTimeField(auto_now_add=True)
-    #user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
@@ -32,7 +31,7 @@ class Item(models.Model):
     post_item_context = models.TextField(max_length=500)
     level = models.ForeignKey(Level, on_delete=models.PROTECT)
     judgement = models.IntegerField()
-    research = models.ForeignKey(Research, on_delete=models.CASCADE)
+    research = models.ForeignKey(Experiment, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.item_text
