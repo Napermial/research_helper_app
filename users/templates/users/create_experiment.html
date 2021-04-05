@@ -9,6 +9,7 @@
                 $('[data-toggle="dropdown"]').dropdown()
             });
             let factorNames = []
+            let levelNames = []
 
             function addFactor() {
                 let factorName = $("#factorName").val();
@@ -18,7 +19,7 @@
 
             function syncFactors() {
                 let selects = document.querySelectorAll("[id^='FormSelectFactor']")
-                let root = $('#dropdown_root')
+                let root = $('#dropdown_factor_root')
                 for (const node of selects) {
                     while (node.hasChildNodes()) {
                         node.removeChild(node.lastChild)
@@ -40,7 +41,15 @@
                 root.empty()
                 for (let i = 0; i < numberOfSelects; i++) {
                     let nameOfFactor = "FormSelectFactor" + i
-                    let factor = '<div class="form-group"> <label for="' + nameOfFactor + '"  >select factor</label> <select class="form-control" id="' + nameOfFactor + '"> </select></div>'
+                    let factor = '<div class="form-group"> <label for="'
+                        + nameOfFactor +
+                        '"  >Select Factor ' + (i + 1) + '</label> <select class="form-control" id="'
+                        + nameOfFactor +
+                        '"> </select><div class="input-group mb-3"> \
+                        <div class="input-group-prepend">\
+                        <a class="btn btn-outline-secondary" type="button" onclick="appendLevelToFactor(this)">Add Level</a>\
+                        </div><select class="custom-select" id="FormSelectLevel' + i + '"></select> \
+                        </div></div>'
                     root.append(factor)
                 }
                 syncFactors()
@@ -49,6 +58,41 @@
             function removeFactor(factor) {
                 factorNames = factorNames.filter(item => item !== factor.text)
                 syncFactors()
+            }
+
+            function syncLevels() {
+                let selects = document.querySelectorAll("[id^='FormSelectLevel']")
+                let root = $('#dropdown_level_root')
+                for (const node of selects) {
+                    while (node.hasChildNodes()) {
+                        node.removeChild(node.lastChild)
+                    }
+                    for (let level of levelNames) {
+                        node.appendChild(new Option(level, ""))
+                    }
+                }
+                root.empty()
+                for (const level of levelNames) {
+                    root.append("<a class='dropdown-item' onclick='removeLevel(this)'>" + level + "</a>")
+                }
+            }
+
+            function addLevel() {
+                let levelName = $("#levelName").val();
+                levelNames.push(levelName)
+                syncLevels()
+            }
+
+            function removeLevel(level) {
+                levelNames = levelNames.filter(item => item !== level.text)
+                syncLevels()
+            }
+
+            function appendLevelToFactor(level) {
+                let adder = $(level)
+                let countLevels = document.querySelectorAll("[id^='FormSelectLevel']").length
+                adder.parent().parent().prepend('<div class="input-group lg" ><select class="custom-select" id="FormSelectLevel' + countLevels + '"></select></div>')
+                syncLevels()
             }
         </script>
 
@@ -63,30 +107,27 @@
             </button>
             <button class="btn btn-danger dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown"
                     aria-haspopup="true" aria-expanded="false">
-                Remove factor
+                Remove Factor
             </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenu2" id="dropdown_root">
-            </div>
-
-        </div>
-        <div class="root-for-factor">
-        </div>
-        <div class="form-group">
-            <label for="FormFactorNumber">Enter the number of levels</label>
-            <input type="number" id="level_number" onchange="changeNumberOfLevels()" value="1">
+            <div class="dropdown-menu" aria-labelledby="dropdownMenu2" id="dropdown_factor_root"></div>
             <button type="button" class="btn btn-secondary" data-container="body" data-html="true" data-toggle="popover"
                     data-placement="top" data-content='<input type="level" id="levelName" placeholder="add name to level">
                     <button type="button" onclick="addLevel()" class="btn btn-light">Add</button>'>
-                Add Factor
+                Add Level
             </button>
-            <button class="btn btn-danger dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown"
+            <button class="btn btn-danger dropdown-toggle" type="button" id="dropdownMenu3" data-toggle="dropdown"
                     aria-haspopup="true" aria-expanded="false">
-                Remove factor
+                Remove Level
             </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenu2" id="dropdown_root">
-            </div>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenu3" id="dropdown_level_root"></div>
 
-        </div>
+
+            <div class="root-for-factor">
+            </div>
+            <div class="form-group">
+
+
+            </div>
 
     </form>
 {% endblock %}
