@@ -5,12 +5,12 @@
     <form>
         <script type="text/javascript">
             $(function () {
-                $('[data-toggle="popover"]').popover({sanitize: false})
+                $('[data-toggle="popover"]').popover({sanitize: false});
+                $('[data-toggle="dropdown"]').dropdown()
             });
             let factorNames = []
 
             function addFactor() {
-                let selects = document.querySelectorAll("[id^='FormSelectFactor']")
                 let factorName = $("#factorName").val();
                 factorNames.push(factorName)
                 syncFactors()
@@ -28,8 +28,8 @@
                     }
                 }
                 root.empty()
-                for(const factor of factorNames){
-                    root.append("<a class='dropdown-item' onclick='removeFactor(this)' >"+ factor +"</a>")
+                for (const factor of factorNames) {
+                    root.append("<a class='dropdown-item' onclick='removeFactor(this)' >" + factor + "</a>")
                 }
 
             }
@@ -45,7 +45,8 @@
                 }
                 syncFactors()
             }
-            function removeFactor(factor){
+
+            function removeFactor(factor) {
                 factorNames = factorNames.filter(item => item !== factor.text)
                 syncFactors()
             }
@@ -55,22 +56,37 @@
             <label for="FormFactorNumber">Enter the number of factors</label>
             <input type="number" id="factor_number" onchange="changeNumberOfFactors()" value="1">
             <button type="button" class="btn btn-secondary" data-container="body" data-html="true" data-toggle="popover"
+                    id="add_dissmissable"
                     data-placement="top" data-content='<input type="factor" id="factorName" placeholder="add name to factor">
                     <button type="button" onclick="addFactor()" class="btn btn-light">Add</button>'>
                 Add Factor
             </button>
-            <div class="dropdown">
-                <button class="btn btn-danger dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Remove element
-                </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenu2" id="dropdown_root">
-                </div>
+            <button class="btn btn-danger dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                Remove factor
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenu2" id="dropdown_root">
             </div>
 
         </div>
         <div class="root-for-factor">
         </div>
+        <div class="form-group">
+            <label for="FormFactorNumber">Enter the number of levels</label>
+            <input type="number" id="level_number" onchange="changeNumberOfLevels()" value="1">
+            <button type="button" class="btn btn-secondary" data-container="body" data-html="true" data-toggle="popover"
+                    data-placement="top" data-content='<input type="level" id="levelName" placeholder="add name to level">
+                    <button type="button" onclick="addLevel()" class="btn btn-light">Add</button>'>
+                Add Factor
+            </button>
+            <button class="btn btn-danger dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                Remove factor
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenu2" id="dropdown_root">
+            </div>
 
+        </div>
 
     </form>
 {% endblock %}
