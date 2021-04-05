@@ -2,7 +2,8 @@
 {% block title %}{% endblock %}
 {% block navbar %}{{ block.super }}{% endblock %}
 {% block content %}
-    <form>
+    <form method="post" action="/create/experiment/upload">
+    {% csrf_token %}
         <script type="text/javascript">
             $(function () {
                 $('[data-toggle="popover"]').popover({sanitize: false});
@@ -10,7 +11,12 @@
             });
             let factorNames = []
             let levelNames = []
+            window.addEventListener("load", changeNumberOfFactors);
 
+            function upload(e){
+                let file =  $(e).val().split("\\").pop()
+                $('.custom-file-label').addClass("selected").html(file)
+            }
             function addFactor() {
                 let factorName = $("#factorName").val();
                 factorNames.push(factorName)
@@ -97,6 +103,13 @@
         </script>
 
         <div class="form-group">
+            <div class="input-group mb-3 p-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Name your experiment</span>
+                </div>
+                <input type="text" class="form-control" aria-label="Default"
+                       aria-describedby="inputGroup-sizing-default">
+            </div>
             <label for="FormFactorNumber">Enter the number of factors</label>
             <input type="number" id="factor_number" onchange="changeNumberOfFactors()" value="1">
             <button type="button" class="btn btn-secondary" data-container="body" data-html="true" data-toggle="popover"
@@ -122,12 +135,13 @@
             <div class="dropdown-menu" aria-labelledby="dropdownMenu3" id="dropdown_level_root"></div>
 
 
-            <div class="root-for-factor">
+            <div class="root-for-factor"></div>
+            <div><h2>You can upload an excel sheet with your items</h2></div>
+            <div class="custom-file">
+                <input type="file" class="custom-file-input" onchange="upload(this)" id="customFile" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+                <label class="custom-file-label" for="customFile">Choose file</label>
             </div>
-            <div class="form-group">
-
-
-            </div>
-
+            <input type="submit" class="btn btn-primary" value="Save" />
+        </div>
     </form>
 {% endblock %}
