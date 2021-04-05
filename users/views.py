@@ -23,3 +23,11 @@ def experiments(request):
 @login_required
 def create_experiment(request):
     return render(request, "users/create_experiment.html")
+
+
+@login_required
+def create_experiment_upload(request):
+    file = request.FILES.getlist()
+    print(file)
+    print(str(request.body))
+    return HttpResponse("ahhan")

@@ -2,7 +2,7 @@
 {% block title %}{% endblock %}
 {% block navbar %}{{ block.super }}{% endblock %}
 {% block content %}
-    <form method="post" action="/create/experiment/upload">
+    <form method="post" action="/create/experiment/upload" xmlns="http://www.w3.org/1999/html">
     {% csrf_token %}
         <script type="text/javascript">
             $(function () {
@@ -31,7 +31,7 @@
                         node.removeChild(node.lastChild)
                     }
                     for (let factor of factorNames) {
-                        node.appendChild(new Option(factor, ""))
+                        node.appendChild(new Option(factor, factor))
                     }
                 }
                 root.empty()
@@ -53,7 +53,7 @@
                         + nameOfFactor +
                         '"> </select><div class="input-group mb-3"> \
                         <div class="input-group-prepend">\
-                        <a class="btn btn-outline-secondary" type="button" onclick="appendLevelToFactor(this)">Add Level</a>\
+                        <a class="btn btn-outline-secondary" name="level" type="button" onclick="appendLevelToFactor(this)">Add Level</a>\
                         </div><select class="custom-select" id="FormSelectLevel' + i + '"></select> \
                         </div></div>'
                     root.append(factor)
@@ -74,7 +74,7 @@
                         node.removeChild(node.lastChild)
                     }
                     for (let level of levelNames) {
-                        node.appendChild(new Option(level, ""))
+                        node.appendChild(new Option(level, level))
                     }
                 }
                 root.empty()
@@ -100,6 +100,40 @@
                 adder.parent().parent().prepend('<div class="input-group lg" ><select class="custom-select" id="FormSelectLevel' + countLevels + '"></select></div>')
                 syncLevels()
             }
+            function gatherFactors(){
+                let structure = []
+                let element = {}
+                let root = document.querySelector('.root-for-factor')
+                for (let node of root.children){
+                    let factor = $(node.children[1]).find(':selected').text()
+                    element["factor"] = factor
+                    let levels = []
+                    for(let level of node.children[2].children){
+                        if(level.className === "custom-select"){
+                            let lev = $(level).find(":selected").text()
+                            levels.push({"level":lev})
+                        }else if(level.className === "input-group lg"){
+                            let lev = $(level.children[0]).find(':selected').text()
+                            levels.push({"level":lev})
+                        }else {
+                            continue
+                        }
+                        element.levels = levels
+                    }
+                    structure.push(element)
+                }
+                return structure
+            }
+
+            $(function() {
+                //listen to form submit
+                $("form").on("submit", function(event) {
+                    event.preventDefault();
+                    $("#schema").val(JSON.stringify(gatherFactors()))
+                    $(this).unbind('submit').submit()
+                });
+            });
+
         </script>
 
         <div class="form-group">
@@ -107,7 +141,7 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text" id="inputGroup-sizing-default">Name your experiment</span>
                 </div>
-                <input type="text" class="form-control" aria-label="Default"
+                <input type="text"  name="experiment_name" class="form-control" aria-label="Default"
                        aria-describedby="inputGroup-sizing-default">
             </div>
             <label for="FormFactorNumber">Enter the number of factors</label>
@@ -138,10 +172,11 @@
             <div class="root-for-factor"></div>
             <div><h2>You can upload an excel sheet with your items</h2></div>
             <div class="custom-file">
-                <input type="file" class="custom-file-input" onchange="upload(this)" id="customFile" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+                <input type="file" class="custom-file-input" name="experiment_items" onchange="upload(this)" id="customFile" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
                 <label class="custom-file-label" for="customFile">Choose file</label>
             </div>
-            <input type="submit" class="btn btn-primary" value="Save" />
+            <input type="submit" class="btn btn-primary" value="Save">
         </div>
+        <input hidden name="schema" id="schema"/>
     </form>
 {% endblock %}
