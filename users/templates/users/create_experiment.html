@@ -2,7 +2,7 @@
 {% block title %}{% endblock %}
 {% block navbar %}{{ block.super }}{% endblock %}
 {% block content %}
-    <form method="post" action="/create/experiment/upload" xmlns="http://www.w3.org/1999/html">
+    <form method="post" action="/create/experiment/upload" xmlns="http://www.w3.org/1999/html" enctype="multipart/form-data">
     {% csrf_token %}
         <script type="text/javascript">
             $(function () {

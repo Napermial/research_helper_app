@@ -1,9 +1,11 @@
+import simplejson
 from django.shortcuts import render
 
 # Create your views here.
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import authenticate, login, logout
+
+from users import read_excel
 
 
 def index(request):
@@ -27,7 +29,8 @@ def create_experiment(request):
 
 @login_required
 def create_experiment_upload(request):
-    file = request.FILES.getlist()
-    print(file)
-    print(str(request.body))
+    schema = simplejson.loads(request.POST['schema'])
+    print(schema)
+    file_name, file = request.FILES.popitem()
+    read_excel.handle_file(schema, file_name, file)
     return HttpResponse("ahhan")
