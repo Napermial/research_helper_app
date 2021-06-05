@@ -3,7 +3,7 @@ from io import BytesIO
 
 
 def check_schema(schema, file_schema):
-    if schema is file_schema:
+    if schema == file_schema:
         return True
     if len(schema) > len(file_schema):
         print("web schema is larger")
@@ -38,3 +38,4 @@ def put_into_db(file):
 def handle_file(schema, file_name, file):
     file_schema, file = read_file(file[0])
     print(check_schema(schema, file_schema))
+

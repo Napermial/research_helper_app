@@ -7,11 +7,14 @@
         <script type="text/javascript">
             $(function () {
                 $('[data-toggle="popover"]').popover({sanitize: false});
-                $('[data-toggle="dropdown"]').dropdown()
+                $('[data-toggle="dropdown"]').dropdown();
+                $('.spinner-border').hide();
             });
+
             let factorNames = []
             let levelNames = []
             window.addEventListener("load", changeNumberOfFactors);
+
 
             function upload(e){
                 let file =  $(e).val().split("\\").pop()
@@ -129,10 +132,14 @@
                 //listen to form submit
                 $("form").on("submit", function(event) {
                     event.preventDefault();
+                    $("form").hide();
+                    $('.spinner-border').show();
                     $("#schema").val(JSON.stringify(gatherFactors()))
                     $(this).unbind('submit').submit()
                 });
             });
+
+
 
         </script>
 
@@ -177,6 +184,11 @@
             </div>
             <input type="submit" class="btn btn-primary" value="Save">
         </div>
-        <input hidden name="schema" id="schema"/>
+        <input hidden name="schema" id="schema">
     </form>
+    <div class="d-flex justify-content-center">
+    <div class="spinner-border" style="width: 300px; height: 300px;margin-top: 20px" role="status" >
+        <span class="sr-only">Loading...</span>
+    </div>
+    </div>
 {% endblock %}
