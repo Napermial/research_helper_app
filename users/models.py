@@ -21,7 +21,7 @@ class Level(models.Model):
 class Experiment(models.Model):
     name = models.TextField()
     creation_date = models.DateTimeField(auto_now_add=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.IntegerField
 
     def __str__(self):
         return self.name

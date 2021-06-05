@@ -34,7 +34,6 @@ def create_experiment_upload(request):
     experiment =  Experiment()
     experiment.name = request.POST['experiment_name']
 
-    print(request.POST)
     file_name, file = request.FILES.popitem()
     schema, file_read = read_excel.handle_file(schema, file)
     read_excel.put_into_db(file_read, schema, experiment.pk)
