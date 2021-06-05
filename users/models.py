@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.contrib.auth.models import User
 
 
 class Factor(models.Model):
@@ -20,6 +21,7 @@ class Level(models.Model):
 class Experiment(models.Model):
     name = models.TextField()
     creation_date = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
@@ -30,7 +32,7 @@ class Item(models.Model):
     item_text = models.TextField(max_length=500)
     post_item_context = models.TextField(max_length=500)
     level = models.ForeignKey(Level, on_delete=models.PROTECT)
-    judgement = models.IntegerField()
+    judgement = models.FloatField()
     research = models.ForeignKey(Experiment, on_delete=models.CASCADE)
 
     def __str__(self):
