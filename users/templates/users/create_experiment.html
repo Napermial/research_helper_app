@@ -52,12 +52,12 @@
                     let nameOfFactor = "FormSelectFactor" + i
                     let factor = '<div class="form-group"> <label for="'
                         + nameOfFactor +
-                        '"  >Select Factor ' + (i + 1) + '</label> <select class="form-control" id="'
+                        '"  >Select Factor ' + (i + 1) + '</label> <select class="form-control" required id="'
                         + nameOfFactor +
                         '"> </select><div class="input-group mb-3"> \
                         <div class="input-group-prepend">\
                         <a class="btn btn-outline-secondary" name="level" type="button" onclick="appendLevelToFactor(this)">Add Level</a>\
-                        </div><select class="custom-select" id="FormSelectLevel' + i + '"></select> \
+                        </div><select class="custom-select"  required id="FormSelectLevel' + i + '"></select> \
                         </div></div>'
                     root.append(factor)
                 }

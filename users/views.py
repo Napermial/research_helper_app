@@ -6,6 +6,7 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 
 from users import read_excel
+from .models import Experiment
 
 
 def index(request):
@@ -30,7 +31,11 @@ def create_experiment(request):
 @login_required
 def create_experiment_upload(request):
     schema = simplejson.loads(request.POST['schema'])
-    print(schema)
+    experiment =  Experiment()
+    experiment.name = request.POST['experiment_name']
+
+    print(request.POST)
     file_name, file = request.FILES.popitem()
-    read_excel.handle_file(schema, file_name, file)
+    schema, file_read = read_excel.handle_file(schema, file)
+    read_excel.put_into_db(file_read, schema, experiment.pk)
     return HttpResponse("ahhan")
