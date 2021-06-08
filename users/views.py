@@ -20,7 +20,7 @@ def user(request):
 
 @login_required
 def experiments(request):
-    users_experiments = Experiment.objects.all()
+    users_experiments = Experiment.objects.filter(user_id=request.user.pk)
     items_count = [Item.objects.filter(experiment=experiment.id).count() for experiment in users_experiments]
     fill_count = [Judgement.objects.filter(item_id=item).count() for item in items_count]
     experiments_zipped = zip(users_experiments, items_count, fill_count)
@@ -37,6 +37,7 @@ def create_experiment_upload(request):
     schema = simplejson.loads(request.POST['schema'])
     experiment = Experiment()
     experiment.name = request.POST['experiment_name']
+    experiment.user_id = request.user.pk
     experiment.save()
     file_name, file = request.FILES.popitem()
     schema, file_read = read_excel.handle_file(schema, file)
