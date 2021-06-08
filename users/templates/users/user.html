@@ -7,13 +7,13 @@
     <a type="button" class="btn btn-secondary btn-lg" href="/create/experiment">Create new experiment</a>
     <div class="container-fluid">
         <div class="row">
-            {% for elem in n %}
+            {% for elem in  experiments %}
                 <div class="row">
                     <div class="card" style="width: 18rem;">
                         <div class="card-body">
-                            <h5 class="card-title">experiment title </h5>
-                            <h6 class="card-subtitle mb-2 text-muted">No. items:</h6>
-                            <h6 class="card-subtitle mb-2 text-muted">No. fills:</h6>
+                            <h5 class="card-title">{{ elem.0.name }} </h5>
+                            <h6 class="card-subtitle mb-2 text-muted">No. items: {{  elem.1 }}</h6>
+                            <h6 class="card-subtitle mb-2 text-muted">No. fills: {{ elem.2 }}</h6>
                             <a href="research/{{ 1 }}" class="card-link">Edit experiment</a>
                         </div>
                     </div>
