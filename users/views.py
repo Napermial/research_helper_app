@@ -6,7 +6,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 
 from users import read_excel
-from .models import Experiment, Item, Judgement
+from .models import Experiment, Item, Judgement, Level, Factor
 
 
 def index(request):
@@ -47,7 +47,10 @@ def create_experiment_upload(request):
 
 @login_required
 def edit_experiment(request, experiment_id):
-    return render(request, "users/edit_experiment.html")
+    exp = Experiment.objects.get(id=experiment_id)
+    items = Item.objects.filter(experiment_id=experiment_id)
+    levels = Level.objects.filter(experiment_id=experiment_id)
+    return render(request, "users/edit_experiment.html", {"experiment": exp, "items": items, "levels": levels})
 
 
 @login_required

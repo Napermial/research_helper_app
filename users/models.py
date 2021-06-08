@@ -3,8 +3,18 @@ from django.conf import settings
 from django.contrib.auth.models import User
 
 
+class Experiment(models.Model):
+    name = models.TextField()
+    creation_date = models.DateTimeField(auto_now_add=True)
+    user_id = models.ForeignKey(User, null=True, on_delete=models.PROTECT)
+
+    def __str__(self):
+        return self.name
+
+
 class Factor(models.Model):
     name = models.TextField()
+    experiment_id = models.ForeignKey(Experiment,null=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
@@ -13,15 +23,7 @@ class Factor(models.Model):
 class Level(models.Model):
     name = models.TextField()
     factor = models.ForeignKey(Factor, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.name
-
-
-class Experiment(models.Model):
-    name = models.TextField()
-    creation_date = models.DateTimeField(auto_now_add=True)
-    user_id = models.ForeignKey(User, null=True, on_delete=models.PROTECT)
+    experiment_id = models.ForeignKey(Experiment,null=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name

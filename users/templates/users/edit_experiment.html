@@ -2,7 +2,22 @@
 {% block title %}{% endblock %}
 {% block navbar %}{{ block.super }}{% endblock %}
 {% block content %}
-    <h2>experiment name</h2>
+    <h2>{{ experiment.name }}</h2>
+    {% for item in items %}
+        <h4>{{ item.item_text }}</h4>
+
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <label class="input-group-text" for="inputGroupSelect01">Level</label>
+            </div>
+            <select class="custom-select" id="inputGroupSelect01">
+                {% for level in levels %}
+                    <option {% if level.id == item.level_id %} selected {% endif %} value="{{ level.id }}">{{ level.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+    {% endfor %}
 
 
 {% endblock  %}
