@@ -32,8 +32,8 @@ class Item(models.Model):
     item_text = models.TextField(max_length=500)
     post_item_context = models.TextField(max_length=500)
     level = models.ForeignKey(Level, on_delete=models.PROTECT)
-    judgement = models.FloatField()
-    research = models.ForeignKey(Experiment, on_delete=models.CASCADE)
+    judgement = models.FloatField(blank=True)
+    experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.item_text

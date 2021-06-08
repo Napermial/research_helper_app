@@ -51,14 +51,28 @@ def read_file(input_file):
     return schema, lines
 
 
-def put_into_db(file, schema, experiment_id):
+def create_item(line, experiment):
+    item = Item()
+    item.level = Level.objects.filter(name=line.level).first()
+    item.item_text = line.stimulus
+    item.pre_item_context = line.pre_context
+    item.post_item_context = line.post_context
+    item.experiment = experiment
+    print(item)
+    item.save()
+
+
+def put_into_db(file, schema, experiment):
     for line in file:
-        if Factor.objects.filter(name=line['factor']):
-            if Level.objects.filter(name=line['level']):
-                item = Item()
-                item.level = Level.objects.filter(name=line['level']).first()
-                item.pre_item_context = line['pre_context']
-                item.post_item_context = line['post_context']
+        if Factor.objects.filter(name=line.factor):
+            if Level.objects.filter(name=line.level):
+                create_item(line, experiment)
+        else:
+            factor = Factor(name=line.factor)
+            factor.save()
+            level = Level(name=line.level, factor=factor)
+            level.save()
+            create_item(line, experiment)
 
 
 def handle_file(schema, file):

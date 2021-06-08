@@ -31,10 +31,10 @@ def create_experiment(request):
 @login_required
 def create_experiment_upload(request):
     schema = simplejson.loads(request.POST['schema'])
-    experiment =  Experiment()
+    experiment = Experiment()
     experiment.name = request.POST['experiment_name']
-
+    experiment.save()
     file_name, file = request.FILES.popitem()
     schema, file_read = read_excel.handle_file(schema, file)
-    read_excel.put_into_db(file_read, schema, experiment.pk)
+    read_excel.put_into_db(file_read, schema, experiment)
     return HttpResponse("ahhan")
