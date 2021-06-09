@@ -53,6 +53,6 @@ def edit_experiment(request, experiment_id):
     return render(request, "users/edit_experiment.html", {"experiment": exp, "items": items, "levels": levels})
 
 
-@login_required
 def view_experiment(request, experiment_id):
-    return render(request, "users/edit_experiment.html")
+
+    return render(request, "users/run_experiment.html")

@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 
 class Experiment(models.Model):
     name = models.TextField()
+    intro_text = models.TextField(null=True)
     creation_date = models.DateTimeField(auto_now_add=True)
     user_id = models.ForeignKey(User, null=True, on_delete=models.PROTECT)
 
