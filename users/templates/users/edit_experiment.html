@@ -4,11 +4,10 @@
 {% block content %}
     <h2>{{ experiment.name }}</h2>
     {% for item in items %}
-        <h4>{{ item.item_text }}</h4>
-
-        <div class="input-group mb-3">
+        <div class="mb-3">
+        <div class="input-group">
             <div class="input-group-prepend">
-                <label class="input-group-text" for="inputGroupSelect01">Level</label>
+                <label class="input-group-text" for="inputGroupSelect01">Sentence level</label>
             </div>
             <select class="custom-select" id="inputGroupSelect01">
                 {% for level in levels %}
@@ -16,8 +15,21 @@
                 {% endfor %}
             </select>
         </div>
-
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <label class="input-group-text" for="inputGroupSelect01">context for item</label>
+                </div>
+                <input  class="form-control mb-2" value="{{ item.pre_item_context }}" >
+            </div>
+            <h4>item</h4>
+            <input type="text" class="form-control" id="{{ item.id }}" value="{{ item.item_text }}">
+        <h4>post context for item</h4>
+        <h3 class="form-control mb-2" >{{ item.post_item_context }}</h3>
+        </div>
     {% endfor %}
+
+    <button class="btn btn-secondary">add sentence</button>
+    <button class="btn btn-primary">Save</button>
 
 
 {% endblock  %}
