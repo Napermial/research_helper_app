@@ -3,12 +3,13 @@
 {% block navbar %}{{ block.super }}{% endblock %}
 {% block content %}
     <h2>{{ experiment.name }}</h2>
+    <a href="{{ request.path|cut:'/edit'}}">link to experiment</a>
 
     <div class="input-group mb-3">
         <div class="input-group-prepend">
             <span class="input-group-text">intro to experiment</span>
         </div>
-        <textarea class="form-control" aria-label="With textarea">{% if experiment.intro_text != None %}{{ experiment.intro_text }}{% else %}Type your intro text here...
+        <textarea class="form-control" style="height: 120px;resize: none" aria-label="With textarea">{% if experiment.intro_text != None %}{{ experiment.intro_text }}{% else %}Type your intro text here...
         {% endif %}</textarea>
     </div>
 
