@@ -23,8 +23,21 @@ def user(request):
 @login_required
 def experiments(request):
     users_experiments = Experiment.objects.filter(user_id=request.user.pk)
-    items_count = [Item.objects.filter(experiment=experiment.id).count() for experiment in users_experiments]
-    fill_count = [Judgement.objects.filter(item_id=item).count() for item in items_count]
+    items_count = []
+    fill_count = []
+    for experiment in users_experiments:
+        item_count = Item.objects.filter(experiment=experiment.id).count()
+        items_count.append(item_count)
+        if item_count == 0:
+            fill_count.append(0)
+        else:
+            fill = 0
+            for item in Item.objects.filter(experiment_id=experiment.id):
+                fill += Judgement.objects.filter(item_id=item.id).count()
+            fill_count.append(fill)
+    print(fill_count)
+    print(items_count)
+    print(users_experiments)
     experiments_zipped = zip(users_experiments, items_count, fill_count)
     return render(request, "users/user.html", {'experiments': experiments_zipped})
 
@@ -76,4 +89,5 @@ def view_next_experiment_item(request, experiment_id, item_id):
 @require_POST
 def submit_judgement(request):
     data = simplejson.loads(request.body)
+    Judgement(judgement=data['judgement'], item_id=data['item_id']).save()
     return HttpResponse(b'success')
