@@ -3,38 +3,43 @@
 {% block navbar %}{{ block.super }}{% endblock %}
 {% block content %}
     <h2>{{ experiment.name }}</h2>
-    <a href="{{ request.path|cut:'/edit'}}">link to experiment</a>
+    <a href="{{ request.path|cut:'/edit' }}">link to experiment</a>
 
     <div class="input-group mb-3">
         <div class="input-group-prepend">
             <span class="input-group-text">intro to experiment</span>
         </div>
-        <textarea class="form-control" style="height: 120px;resize: none" aria-label="With textarea">{% if experiment.intro_text != None %}{{ experiment.intro_text }}{% else %}Type your intro text here...
+        <textarea class="form-control" style="height: 120px;resize: none"
+                  aria-label="With textarea">{% if experiment.intro_text != None %}{{ experiment.intro_text }}{% else %}
+            Type your intro text here...
         {% endif %}</textarea>
     </div>
 
     {% for item in items %}
         <div class="mb-3">
-        <div class="input-group">
-            <div class="input-group-prepend">
-                <label class="input-group-text" for="inputGroupSelect01">Sentence level</label>
-            </div>
-            <select class="custom-select" id="inputGroupSelect01">
+            <div class="input-group">
                 {% for level in levels %}
-                    <option {% if level.id == item.level_id %} selected {% endif %} value="{{ level.id }}">{{ level.name }}</option>
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="inputGroupSelect01">{{ level.factor.name }}</label>
+                    </div>
+                    <select class="custom-select" id="inputGroupSelect01">
+
+                        <option {% if level.id == item.level_id %} selected {% endif %}
+                                                                   value="{{ level.id }}">{{ level.name }}</option>
+
+                    </select>
+                    </div>
                 {% endfor %}
-            </select>
-        </div>
             <div class="input-group">
                 <div class="input-group-prepend">
                     <label class="input-group-text" for="inputGroupSelect01">context for item</label>
                 </div>
-                <input  class="form-control mb-2" value="{{ item.pre_item_context }}" >
+                <input class="form-control mb-2" value="{{ item.pre_item_context }}">
             </div>
             <h4>item</h4>
             <input type="text" class="form-control" id="{{ item.id }}" value="{{ item.item_text }}">
-        <h4>post context for item</h4>
-        <h3 class="form-control mb-2" >{{ item.post_item_context }}</h3>
+            <h4>post context for item</h4>
+            <h3 class="form-control mb-2">{{ item.post_item_context }}</h3>
         </div>
     {% endfor %}
 
@@ -42,4 +47,4 @@
     <button class="btn btn-primary">Save</button>
 
 
-{% endblock  %}
+{% endblock %}

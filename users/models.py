@@ -24,7 +24,6 @@ class Factor(models.Model):
 class Level(models.Model):
     name = models.TextField()
     factor = models.ForeignKey(Factor, on_delete=models.CASCADE)
-    experiment_id = models.ForeignKey(Experiment,null=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name

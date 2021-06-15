@@ -151,30 +151,42 @@
                 <input type="text"  name="experiment_name" class="form-control" aria-label="Default"
                        aria-describedby="inputGroup-sizing-default">
             </div>
-            <label for="FormFactorNumber">Enter the number of factors</label>
-            <input type="number" id="factor_number" onchange="changeNumberOfFactors()" value="1">
-            <button type="button" class="btn btn-secondary" data-container="body" data-html="true" data-toggle="popover"
-                    id="add_dissmissable"
-                    data-placement="top" data-content='<input type="factor" id="factorName" placeholder="add name to factor">
-                    <button type="button" onclick="addFactor()" class="btn btn-light">Add</button>'>
-                Add Factor
-            </button>
-            <button class="btn btn-danger dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown"
-                    aria-haspopup="true" aria-expanded="false">
-                Remove Factor
-            </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenu2" id="dropdown_factor_root"></div>
-            <button type="button" class="btn btn-secondary" data-container="body" data-html="true" data-toggle="popover"
-                    data-placement="top" data-content='<input type="level" id="levelName" placeholder="add name to level">
-                    <button type="button" onclick="addLevel()" class="btn btn-light">Add</button>'>
-                Add Level
-            </button>
-            <button class="btn btn-danger dropdown-toggle" type="button" id="dropdownMenu3" data-toggle="dropdown"
-                    aria-haspopup="true" aria-expanded="false">
-                Remove Level
-            </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenu3" id="dropdown_level_root"></div>
 
+            <div class="input-group mb-3 p-3" >
+                <input type="text"  name="experiment_name" class="form-control" aria-label="Default"
+                       aria-describedby="inputGroup-sizing-default" placeholder="Factor name" >
+                <div class="input-group-append">
+                    <button class="btn  btn-success p-8" type="button">Add factor</button>
+                </div>
+            </div>
+
+            <div style="padding-top: 80px"></div>
+            <h3>Experiment</h3>
+            <div class="input-group mb-3 p-3">
+                <input type="text"  name="experiment_name" class="form-control" aria-label="Default"
+                       aria-describedby="inputGroup-sizing-default" >
+                <div class="input-group-append">
+                    <button class="btn  btn-danger p-8" type="button">Delete factor</button>
+                </div>
+            </div>
+
+            <div class="input-group mb-3 p-3" >
+
+                <input style="margin-left: 50px" type="text"  name="experiment_name" class="form-control col-md-pull-8" aria-label="Default"
+                       aria-describedby="inputGroup-sizing-default" >
+                <div class="input-group-append">
+                    <button class="btn  btn-danger p-8" type="button">Delete level</button>
+                </div>
+            </div>
+
+            <div class="input-group mb-3 p-3" >
+                    <span class="material-icons" style="margin-left: 50px; align-items: center;font-size: 36px">add_circle</span>
+                <input  type="text"  name="experiment_name" class="form-control col-md-pull-8" aria-label="Default"
+                       aria-describedby="inputGroup-sizing-default" placeholder="Level name">
+                <div class="input-group-append">
+                    <button class="btn  btn-success p-8" type="button">Add level</button>
+                </div>
+            </div>
 
             <div class="root-for-factor"></div>
             <div><h2>You can upload an excel sheet with your items</h2></div>
