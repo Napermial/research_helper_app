@@ -52,9 +52,10 @@ def create_experiment_upload(request):
     schema = simplejson.loads(request.POST['schema'])
     experiment = Experiment()
     experiment.name = request.POST['experiment_name']
-    experiment.user_id = request.user.pk
+    experiment.user_id = request.user
     experiment.save()
     file_name, file = request.FILES.popitem()
+    read_excel.insert_factors(schema, experiment.pk)
     schema, file_read = read_excel.handle_file(schema, file)
     read_excel.put_into_db(file_read, schema, experiment)
     return HttpResponseRedirect(f'/experiment/{experiment.pk}/edit')

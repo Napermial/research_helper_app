@@ -4,10 +4,11 @@ from .models import Factor, Level, Item
 
 
 def check_schema(schema, file_schema):
-    if schema == file_schema:
-        return True
-    if len(schema) > len(file_schema):
-        print("web schema is larger")
+    print(file_schema)
+    # if schema == file_schema:
+    #     return True
+    # if len(schema) > len(file_schema):
+    #     print("web schema is larger")
 
 
 class Line:
@@ -73,6 +74,14 @@ def put_into_db(file, schema, experiment):
             level = Level(name=line.level, factor=factor)
             level.save()
             create_item(line, experiment)
+
+
+def insert_factors(schema, experiment_id):
+    for factor in schema:
+        db_factor = Factor(name=factor["name"])
+        db_factor.save()
+        for level in factor["level"]:
+            Level(name=level["name"], factor=db_factor).save()
 
 
 def handle_file(schema, file):
