@@ -15,7 +15,7 @@ class Experiment(models.Model):
 
 class Factor(models.Model):
     name = models.TextField()
-    experiment_id = models.ForeignKey(Experiment,null=True, on_delete=models.CASCADE)
+    experiment_id = models.ForeignKey(Experiment, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
@@ -34,6 +34,7 @@ class Item(models.Model):
     item_text = models.TextField(max_length=500)
     post_item_context = models.TextField(max_length=500)
     level = models.ForeignKey(Level, on_delete=models.PROTECT)
+    lexicalization = models.IntegerField(null=True)
     experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -46,3 +47,11 @@ class Judgement(models.Model):
 
     def __str__(self):
         return self.judgement
+
+
+class Intro(models.Model):
+    text = models.TextField(max_length=400)
+    last = models.BooleanField()
+
+    def __str__(self):
+        return self.text

@@ -18,7 +18,7 @@
             function addFactor(add) {
                 $('.factor-root').append("<div class='container'>" +
                     "<div class='input-group mb-3 p-3'>" +
-                    "<input type='text'  name='factor_name"+ $('.container').length +"' class='form-control' aria-label='Default'" +
+                    "<input type='text'  name='factor_name" + $('.container').length + "' class='form-control' aria-label='Default'" +
                     "aria-describedby='inputGroup-sizing-default' value='"
                     + add.parentNode.parentNode.children.item(1).value + "' >" +
                     "   <div class='input-group-append'>" +
@@ -40,7 +40,7 @@
 
             function addLevel(level) {
                 let factorLevels = level.parentNode.parentNode.children;
-                let levelPlace = factorLevels[factorLevels.length-1]
+                let levelPlace = factorLevels[factorLevels.length - 1]
 
                 $(level.parentNode).before(
                     "<div class='input-group p-3'>" +
@@ -52,7 +52,7 @@
                     "<button class='btn  btn-danger p-8' onclick='removeLevel(this)' " +
                     "type='button'>Delete level</button>" +
                     "</div>" +
-                    "</div>",$(levelPlace)
+                    "</div>", $(levelPlace)
                 )
             }
 
@@ -66,16 +66,16 @@
                 level.parentNode.parentNode.parentNode.removeChild(level.parentNode.parentNode)
             }
 
-            function gatherFactors(){
+            function gatherFactors() {
                 let factors = []
-                for (let container of document.querySelector('.factor-root').childNodes){
-                    let factor = {level:[]}
-                    for (let i = 0;i < container.children.length-1;i++){
-                        if (i === 0){
+                for (let container of document.querySelector('.factor-root').childNodes) {
+                    let factor = {level: []}
+                    for (let i = 0; i < container.children.length - 1; i++) {
+                        if (i === 0) {
                             factor.name = container.children[i].children[0].value;
                             continue;
                         }
-                        factor.level.push({name:container.children[i].children[0].value}) ;
+                        factor.level.push({name: container.children[i].children[0].value});
                     }
                     factors.push(factor);
                 }
@@ -116,7 +116,7 @@
                 </div>
             </div>
             <div style="padding-top: 80px"></div>
-            <h3>Experiment</h3>
+            <h3>Experiment structure</h3>
             <div class="factor-root"></div>
 
             <div><h2>You can upload an excel sheet with your items</h2></div>
