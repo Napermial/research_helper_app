@@ -18,7 +18,7 @@
             function addFactor(add) {
                 $('.factor-root').append("<div class='container'>" +
                     "<div class='input-group mb-3 p-3'>" +
-                    "<input type='text'  name='experiment_name' class='form-control' aria-label='Default'" +
+                    "<input type='text'  name='factor_name"+ $('.container').length +"' class='form-control' aria-label='Default'" +
                     "aria-describedby='inputGroup-sizing-default' value='"
                     + add.parentNode.parentNode.children.item(1).value + "' >" +
                     "   <div class='input-group-append'>" +
@@ -40,9 +40,9 @@
 
             function addLevel(level) {
                 let factorLevels = level.parentNode.parentNode.children;
-                let butLastElement = factorLevels[factorLevels.length - 2]
+                let levelPlace = factorLevels[factorLevels.length-1]
 
-                $(butLastElement).append(
+                $(level.parentNode).before(
                     "<div class='input-group p-3'>" +
                     "<input style='margin-left: 50px' type='text' name='experiment_name' class='form-control col-md-pull-8''" +
                     "aria-label='Default'" +
@@ -52,7 +52,7 @@
                     "<button class='btn  btn-danger p-8' onclick='removeLevel(this)' " +
                     "type='button'>Delete level</button>" +
                     "</div>" +
-                    "</div>"
+                    "</div>",$(levelPlace)
                 )
             }
 
@@ -67,7 +67,9 @@
             }
 
             function gatherFactors(){
-
+                for (let container of document.querySelector('.factor-root').childNodes){
+                    console.log(container.children[0])
+                }
             }
 
 
@@ -107,8 +109,6 @@
             <h3>Experiment</h3>
             <div class="factor-root"></div>
 
-
-            <div class="root-for-factor"></div>
             <div><h2>You can upload an excel sheet with your items</h2></div>
             <div class="custom-file">
                 <input type="file" class="custom-file-input" name="experiment_items" onchange="upload(this)"
