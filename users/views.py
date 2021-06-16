@@ -56,7 +56,7 @@ def create_experiment_upload(request):
     experiment.save()
     file_name, file = request.FILES.popitem()
     read_excel.insert_factors(schema, experiment.pk)
-    schema, file_read = read_excel.handle_file(schema, file)
+    file_read = read_excel.handle_file(schema, file)
     read_excel.put_into_db(file_read, schema, experiment)
     return HttpResponseRedirect(f'/experiment/{experiment.pk}/edit')
 
