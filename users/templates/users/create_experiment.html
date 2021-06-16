@@ -2,135 +2,78 @@
 {% block title %}{% endblock %}
 {% block navbar %}{{ block.super }}{% endblock %}
 {% block content %}
-    <form method="post" action="/create/experiment/upload" xmlns="http://www.w3.org/1999/html" enctype="multipart/form-data">
-    {% csrf_token %}
+    <form method="post" action="/create/experiment/upload" xmlns="http://www.w3.org/1999/html"
+          enctype="multipart/form-data">
+        {% csrf_token %}
         <script type="text/javascript">
             $(function () {
-                $('[data-toggle="popover"]').popover({sanitize: false});
-                $('[data-toggle="dropdown"]').dropdown();
                 $('.spinner-border').hide();
             });
 
-            let factorNames = []
-            let levelNames = []
-            window.addEventListener("load", changeNumberOfFactors);
-
-
-            function upload(e){
-                let file =  $(e).val().split("\\").pop()
+            function upload(e) {
+                let file = $(e).val().split("\\").pop()
                 $('.custom-file-label').addClass("selected").html(file)
             }
-            function addFactor() {
-                let factorName = $("#factorName").val();
-                factorNames.push(factorName)
-                syncFactors()
+
+            function addFactor(add) {
+                $('.factor-root').append("<div class='container'>" +
+                    "<div class='input-group mb-3 p-3'>" +
+                    "<input type='text'  name='experiment_name' class='form-control' aria-label='Default'" +
+                    "aria-describedby='inputGroup-sizing-default' value='"
+                    + add.parentNode.parentNode.children.item(1).value + "' >" +
+                    "   <div class='input-group-append'>" +
+                    "<button class='btn  btn-danger p-8' type='button' " +
+                    "onclick='removeFactor(this)'>Delete factor</button>" +
+                    " </div>" +
+                    "</div>" +
+                    "<div class='input-group mb-3 p-3'>" +
+                    "<span class='material-icons'" +
+                    "style='margin-left: 50px; align-items: center;font-size: 36px'>add_circle</span>" +
+                    "<input type='text' name='experiment_name' class='form-control col-md-pull-8' aria-label='Default'" +
+                    "aria-describedby='inputGroup-sizing-default' placeholder='Level name'" +
+                    "<div class='input-group-append'>" +
+                    "<button class='btn  btn-success p-8' onclick='addLevel(this)' type='button'>Add level</button>" +
+                    "</div>" +
+                    "</div>" +
+                    "</div>")
             }
 
-            function syncFactors() {
-                let selects = document.querySelectorAll("[id^='FormSelectFactor']")
-                let root = $('#dropdown_factor_root')
-                for (const node of selects) {
-                    while (node.hasChildNodes()) {
-                        node.removeChild(node.lastChild)
-                    }
-                    for (let factor of factorNames) {
-                        node.appendChild(new Option(factor, factor))
-                    }
-                }
-                root.empty()
-                for (const factor of factorNames) {
-                    root.append("<a class='dropdown-item' onclick='removeFactor(this)' >" + factor + "</a>")
-                }
+            function addLevel(level) {
+                let factorLevels = level.parentNode.parentNode.children;
+                let butLastElement = factorLevels[factorLevels.length - 2]
 
+                $(butLastElement).append(
+                    "<div class='input-group p-3'>" +
+                    "<input style='margin-left: 50px' type='text' name='experiment_name' class='form-control col-md-pull-8''" +
+                    "aria-label='Default'" +
+                    "aria-describedby='inputGroup-sizing-default' value='" +
+                    level.parentNode.children.item(1).value + "'>" +
+                    "<div class='input-group-append'>" +
+                    "<button class='btn  btn-danger p-8' onclick='removeLevel(this)' " +
+                    "type='button'>Delete level</button>" +
+                    "</div>" +
+                    "</div>"
+                )
             }
 
-            function changeNumberOfFactors() {
-                let numberOfSelects = $("#factor_number").val()
-                let root = $(".root-for-factor")
-                root.empty()
-                for (let i = 0; i < numberOfSelects; i++) {
-                    let nameOfFactor = "FormSelectFactor" + i
-                    let factor = '<div class="form-group"> <label for="'
-                        + nameOfFactor +
-                        '"  >Select Factor ' + (i + 1) + '</label> <select class="form-control" required id="'
-                        + nameOfFactor +
-                        '"> </select><div class="input-group mb-3"> \
-                        <div class="input-group-prepend">\
-                        <a class="btn btn-outline-secondary" name="level" type="button" onclick="appendLevelToFactor(this)">Add Level</a>\
-                        </div><select class="custom-select"  required id="FormSelectLevel' + i + '"></select> \
-                        </div></div>'
-                    root.append(factor)
-                }
-                syncFactors()
-            }
 
             function removeFactor(factor) {
-                factorNames = factorNames.filter(item => item !== factor.text)
-                syncFactors()
+                factor.parentNode.parentNode.parentElement.parentNode.removeChild(factor.parentNode.parentNode.parentElement)
             }
 
-            function syncLevels() {
-                let selects = document.querySelectorAll("[id^='FormSelectLevel']")
-                let root = $('#dropdown_level_root')
-                for (const node of selects) {
-                    while (node.hasChildNodes()) {
-                        node.removeChild(node.lastChild)
-                    }
-                    for (let level of levelNames) {
-                        node.appendChild(new Option(level, level))
-                    }
-                }
-                root.empty()
-                for (const level of levelNames) {
-                    root.append("<a class='dropdown-item' onclick='removeLevel(this)'>" + level + "</a>")
-                }
-            }
-
-            function addLevel() {
-                let levelName = $("#levelName").val();
-                levelNames.push(levelName)
-                syncLevels()
-            }
 
             function removeLevel(level) {
-                levelNames = levelNames.filter(item => item !== level.text)
-                syncLevels()
+                level.parentNode.parentNode.parentNode.removeChild(level.parentNode.parentNode)
             }
 
-            function appendLevelToFactor(level) {
-                let adder = $(level)
-                let countLevels = document.querySelectorAll("[id^='FormSelectLevel']").length
-                adder.parent().parent().prepend('<div class="input-group lg" ><select class="custom-select" id="FormSelectLevel' + countLevels + '"></select></div>')
-                syncLevels()
-            }
             function gatherFactors(){
-                let structure = []
-                let element = {}
-                let root = document.querySelector('.root-for-factor')
-                for (let node of root.children){
-                    let factor = $(node.children[1]).find(':selected').text()
-                    element["factor"] = factor
-                    let levels = []
-                    for(let level of node.children[2].children){
-                        if(level.className === "custom-select"){
-                            let lev = $(level).find(":selected").text()
-                            levels.push({"level":lev})
-                        }else if(level.className === "input-group lg"){
-                            let lev = $(level.children[0]).find(':selected').text()
-                            levels.push({"level":lev})
-                        }else {
-                            continue
-                        }
-                        element.levels = levels
-                    }
-                    structure.push(element)
-                }
-                return structure
+
             }
 
-            $(function() {
+
+            $(function () {
                 //listen to form submit
-                $("form").on("submit", function(event) {
+                $("form").on("submit", function (event) {
                     event.preventDefault();
                     $("form").hide();
                     $('.spinner-border').show();
@@ -140,7 +83,6 @@
             });
 
 
-
         </script>
 
         <div class="form-group">
@@ -148,50 +90,29 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text" id="inputGroup-sizing-default">Name your experiment</span>
                 </div>
-                <input type="text"  name="experiment_name" class="form-control" aria-label="Default"
+                <input type="text" name="experiment_name" class="form-control" aria-label="Default"
                        aria-describedby="inputGroup-sizing-default">
             </div>
 
-            <div class="input-group mb-3 p-3" >
-                <input type="text"  name="experiment_name" class="form-control" aria-label="Default"
-                       aria-describedby="inputGroup-sizing-default" placeholder="Factor name" >
+            <div class="input-group mb-3 p-3">
+                <span class="material-icons"
+                      style="margin-left: 50px; align-items: center;font-size: 36px">add_circle</span>
+                <input type="text" name="experiment_name" class="form-control" aria-label="Default"
+                       aria-describedby="inputGroup-sizing-default" placeholder="Factor name">
                 <div class="input-group-append">
-                    <button class="btn  btn-success p-8" type="button">Add factor</button>
+                    <button class="btn  btn-success p-8" onclick="addFactor(this)" type="button">Add factor</button>
                 </div>
             </div>
-
             <div style="padding-top: 80px"></div>
             <h3>Experiment</h3>
-            <div class="input-group mb-3 p-3">
-                <input type="text"  name="experiment_name" class="form-control" aria-label="Default"
-                       aria-describedby="inputGroup-sizing-default" >
-                <div class="input-group-append">
-                    <button class="btn  btn-danger p-8" type="button">Delete factor</button>
-                </div>
-            </div>
+            <div class="factor-root"></div>
 
-            <div class="input-group mb-3 p-3" >
-
-                <input style="margin-left: 50px" type="text"  name="experiment_name" class="form-control col-md-pull-8" aria-label="Default"
-                       aria-describedby="inputGroup-sizing-default" >
-                <div class="input-group-append">
-                    <button class="btn  btn-danger p-8" type="button">Delete level</button>
-                </div>
-            </div>
-
-            <div class="input-group mb-3 p-3" >
-                    <span class="material-icons" style="margin-left: 50px; align-items: center;font-size: 36px">add_circle</span>
-                <input  type="text"  name="experiment_name" class="form-control col-md-pull-8" aria-label="Default"
-                       aria-describedby="inputGroup-sizing-default" placeholder="Level name">
-                <div class="input-group-append">
-                    <button class="btn  btn-success p-8" type="button">Add level</button>
-                </div>
-            </div>
 
             <div class="root-for-factor"></div>
             <div><h2>You can upload an excel sheet with your items</h2></div>
             <div class="custom-file">
-                <input type="file" class="custom-file-input" name="experiment_items" onchange="upload(this)" id="customFile" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+                <input type="file" class="custom-file-input" name="experiment_items" onchange="upload(this)"
+                       id="customFile" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
                 <label class="custom-file-label" for="customFile">Choose file</label>
             </div>
             <input type="submit" class="btn btn-primary" value="Save">
@@ -199,8 +120,8 @@
         <input hidden name="schema" id="schema">
     </form>
     <div class="d-flex justify-content-center">
-    <div class="spinner-border" style="width: 300px; height: 300px;margin-top: 20px" role="status" >
-        <span class="sr-only">Loading...</span>
-    </div>
+        <div class="spinner-border" style="width: 300px; height: 300px;margin-top: 20px" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
     </div>
 {% endblock %}
