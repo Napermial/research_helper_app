@@ -67,9 +67,19 @@
             }
 
             function gatherFactors(){
+                let factors = []
                 for (let container of document.querySelector('.factor-root').childNodes){
-                    console.log(container.children[0])
+                    let factor = {level:[]}
+                    for (let i = 0;i < container.children.length-1;i++){
+                        if (i === 0){
+                            factor.name = container.children[i].children[0].value;
+                            continue;
+                        }
+                        factor.level.push({name:container.children[i].children[0].value}) ;
+                    }
+                    factors.push(factor);
                 }
+                return factors;
             }
 
 
