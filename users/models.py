@@ -30,10 +30,11 @@ class Level(models.Model):
 
 
 class Item(models.Model):
-    pre_item_context = models.TextField(max_length=500)
+    pre_item_context = models.TextField(max_length=500, null=True)
     item_text = models.TextField(max_length=500)
-    post_item_context = models.TextField(max_length=500)
+    post_item_context = models.TextField(max_length=500, null=True)
     lexicalization = models.IntegerField(null=True)
+    experiment_id = models.ForeignKey(Experiment, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.item_text
@@ -42,7 +43,6 @@ class Item(models.Model):
 class ItemLevel(models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
     level = models.ForeignKey(Level, on_delete=models.CASCADE)
-    experiment_id = models.IntegerField
 
 
 class Judgement(models.Model):

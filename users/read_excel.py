@@ -1,30 +1,36 @@
 from pandas import read_excel
+import openpyxl
 from io import BytesIO
-from .models import Factor, Level, Item
+from .models import Factor, Level, Item, ItemLevel
 
 
 class Line:
-    def __init__(self, factor, level, stimulus, pre_context, post_context):
-        self.factor = factor
-        self.level = level
+    def __init__(self, stimulus, pre_context, post_context, lexicalization, levels):
         self.stimulus = stimulus
         self.pre_context = pre_context
         self.post_context = post_context
+        self.lexicalization = lexicalization
+        self.levels = levels
 
     def __str__(self):
         return self.stimulus
 
+    def __repr__(self):
+        return self.stimulus
+
 
 def read_file(input_file):
-    read = read_excel(BytesIO(input_file.read()))
+    factors_in_workbook = {}
+    workbook = openpyxl.load_workbook(filename=BytesIO(input_file.read()), data_only=True).active
+    position = 4
+    for header in workbook.iter_rows(min_row=1, max_row=1, values_only=True, min_col=5):
+        for item in header:
+            factors_in_workbook[item] = position
+            position += 1
     lines = []
-    for _id, row in read.iterrows():
-        lines.append(Line(row['factor'],
-                          row['level'],
-                          row['stimulus'],
-                          row['pre_context'],
-                          row['post_context']))
-    return lines
+    for row in workbook.iter_rows(min_row=2, values_only=True):
+        lines.append(Line(row[0], row[1], row[2], row[3], row[4:]))
+    return lines, factors_in_workbook
 
 
 def create_item(line):
@@ -34,19 +40,22 @@ def create_item(line):
     item.post_item_context = line.post_context
     item.lexicalization = line.lexicalization
     item.save()
+    return item
 
 
-def put_into_db(file, schema, experiment):
+def put_into_db(file, levels, experiment):
     for line in file:
-        if Factor.objects.filter(name=line.factor):
-            if Level.objects.filter(name=line.level):
-                create_item(line, experiment)
-        else:
-            factor = Factor(name=line.factor)
-            factor.save()
-            level = Level(name=line.level, factor=factor)
-            level.save()
-            create_item(line, experiment)
+        item = create_item(line)
+        item.experiment_id = experiment
+        item.save()
+        for _id, level in enumerate(line.levels):
+            itemlevel = ItemLevel()
+            itemlevel.item = item
+            for schema_level in levels:
+                if schema_level[1] == level:
+                    itemlevel.level = schema_level[0]
+                    itemlevel.save()
+                    break
 
 
 def insert_factors(schema, experiment_id):
@@ -57,10 +66,5 @@ def insert_factors(schema, experiment_id):
         for level in factor["level"]:
             db_level = Level(name=level["name"], factor=db_factor)
             db_level.save()
-            levels.append((db_level.pk, db_level.name, db_factor.pk))
+            levels.append((db_level, db_level.name, db_factor.name))
     return levels
-
-
-def handle_file(schema, file):
-    file = read_file(file[0])
-    return file

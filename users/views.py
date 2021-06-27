@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 
 from users import read_excel
-from .models import Experiment, Item, Judgement, Level, Factor
+from .models import Experiment, Item, Judgement, Level, Factor, ItemLevel
 
 
 def index(request):
@@ -26,7 +26,7 @@ def experiments(request):
     items_count = []
     fill_count = []
     for experiment in users_experiments:
-        item_count = Item.objects.filter(experiment=experiment.id).count()
+        item_count = Item.objects.filter(experiment_id=experiment.id).count()
         items_count.append(item_count)
         if item_count == 0:
             fill_count.append(0)
@@ -55,9 +55,9 @@ def create_experiment_upload(request):
     experiment.user_id = request.user
     experiment.save()
     file_name, file = request.FILES.popitem()
-    read_excel.insert_factors(schema, experiment.pk)
-    file_read = read_excel.handle_file(schema, file)
-    read_excel.put_into_db(file_read, schema, experiment)
+    levels = read_excel.insert_factors(schema, experiment)
+    file_read, factor_positions = read_excel.read_file(file[0])
+    read_excel.put_into_db(file_read, levels, experiment)
     return HttpResponseRedirect(f'/experiment/{experiment.pk}/edit')
 
 
@@ -65,7 +65,7 @@ def create_experiment_upload(request):
 def edit_experiment(request, experiment_id):
     exp = Experiment.objects.get(id=experiment_id)
     items = Item.objects.filter(experiment_id=experiment_id)
-    levels = Level.objects.filter(experiment_id=experiment_id)
+    levels = Level.objects.filter(factor__experiment_id=experiment_id)
     return render(request, "users/edit_experiment.html", {"experiment": exp, "items": items, "levels": levels})
 
 

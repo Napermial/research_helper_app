@@ -29,7 +29,7 @@
                     "<div class='input-group mb-3 p-3'>" +
                     "<span class='material-icons'" +
                     "style='margin-left: 50px; align-items: center;font-size: 36px'>add_circle</span>" +
-                    "<input type='text' name='experiment_name' class='form-control col-md-pull-8' aria-label='Default'" +
+                    "<input type='text'  class='form-control col-md-pull-8' aria-label='Default'" +
                     "aria-describedby='inputGroup-sizing-default' placeholder='Level name'" +
                     "<div class='input-group-append'>" +
                     "<button class='btn  btn-success p-8' onclick='addLevel(this)' type='button'>Add level</button>" +
@@ -44,7 +44,7 @@
 
                 $(level.parentNode).before(
                     "<div class='input-group p-3'>" +
-                    "<input style='margin-left: 50px' type='text' name='experiment_name' class='form-control col-md-pull-8''" +
+                    "<input style='margin-left: 50px' type='text' class='form-control col-md-pull-8''" +
                     "aria-label='Default'" +
                     "aria-describedby='inputGroup-sizing-default' value='" +
                     level.parentNode.children.item(1).value + "'>" +
@@ -100,7 +100,7 @@
         <div class="form-group">
             <div class="input-group mb-3 p-3">
                 <div class="input-group-prepend">
-                    <span class="input-group-text" id="inputGroup-sizing-default">Name your experiment</span>
+                    <span class="input-group-text"id="inputGroup-sizing-default">Name your experiment</span>
                 </div>
                 <input type="text" name="experiment_name" class="form-control" aria-label="Default"
                        aria-describedby="inputGroup-sizing-default">
@@ -109,7 +109,7 @@
             <div class="input-group mb-3 p-3">
                 <span class="material-icons"
                       style="margin-left: 50px; align-items: center;font-size: 36px">add_circle</span>
-                <input type="text" name="experiment_name" class="form-control" aria-label="Default"
+                <input type="text"  class="form-control" aria-label="Default"
                        aria-describedby="inputGroup-sizing-default" placeholder="Factor name">
                 <div class="input-group-append">
                     <button class="btn  btn-success p-8" onclick="addFactor(this)" type="button">Add factor</button>
