@@ -35,16 +35,19 @@
             });
         }
     </script>
+    <div style="margin: auto; width: 50%;padding-top: 100px">
+
+
     {% if first_item %}
-        <h6>{{ experiment.intro_text }}</h6>
-        <h5>{{ first_item.pre_item_context }}</h5>
-        <h5>{{ first_item.item_text }}</h5>
-        <h5>{{ first_item.post_item_context }}</h5>
+        <h6 >{{ experiment.intro_text|default_if_none:"" }}</h6>
+        <h5>{{ first_item.pre_item_context|default_if_none:"" }}</h5>
+        <h5 style="padding-top:20px;padding-bottom: 20px">{{ first_item.item_text }}</h5>
+        <h5>{{ first_item.post_item_context|default_if_none:"" }}</h5>
 
     {% else %}
-        <h5>{{ item.pre_item_context }}</h5>
-        <h5>{{ item.item_text }}</h5>
-        <h5>{{ item.post_item_context }}</h5>
+        <h5>{{ item.pre_item_context|default_if_none:"" }}</h5>
+        <h5 style="padding-top:20px;padding-bottom: 20px">{{ item.item_text }}</h5>
+        <h5>{{ item.post_item_context|default_if_none:"" }}</h5>
     {% endif %}
 
     {% for i in  '123456789'|make_list %}
@@ -55,6 +58,7 @@
     {% endfor %}
     <div>
         <button onclick="submitJudgement()" class="btn btn-success">Send</button>
+    </div>
     </div>
 
 {% endblock %}

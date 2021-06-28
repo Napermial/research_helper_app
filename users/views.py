@@ -35,9 +35,6 @@ def experiments(request):
             for item in Item.objects.filter(experiment_id=experiment.id):
                 fill += Judgement.objects.filter(item_id=item.id).count()
             fill_count.append(fill)
-    print(fill_count)
-    print(items_count)
-    print(users_experiments)
     experiments_zipped = zip(users_experiments, items_count, fill_count)
     return render(request, "users/user.html", {'experiments': experiments_zipped})
 

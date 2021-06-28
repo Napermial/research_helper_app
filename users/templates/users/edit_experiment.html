@@ -4,32 +4,33 @@
 {% block content %}
     <h2>{{ experiment.name }}</h2>
     <a href="{{ request.path|cut:'/edit' }}">link to experiment</a>
-
-    <div class="input-group mb-3">
-        <div class="input-group-prepend">
-            <span class="input-group-text">intro to experiment</span>
+    <div class="intros">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text">intro to experiment</span>
+            </div>
+            <textarea class="form-control" style="height: 120px;resize: none"
+                      aria-label="With textarea">Type your intro text here...
+        </textarea>
         </div>
-        <textarea class="form-control" style="height: 120px;resize: none"
-                  aria-label="With textarea">{% if experiment.intro_text != None %}{{ experiment.intro_text }}{% else %}
-            Type your intro text here...
-        {% endif %}</textarea>
     </div>
+    <button class="btn btn-success" onclick="addIntro()">add intro</button>
 
     {% for item in items %}
         <div class="mb-3">
             <div class="input-group">
-                {% for level in levels %}
-                    <div class="input-group-prepend">
-                        <label class="input-group-text" for="inputGroupSelect01">{{ level.factor.name }}</label>
-                    </div>
-                    <select class="custom-select" id="inputGroupSelect01">
 
+                <div class="input-group-prepend">
+                    <label class="input-group-text" for="inputGroupSelect01">{{ level.factor.name }}</label>
+                </div>
+                <select class="custom-select" id="inputGroupSelect01">
+                    {% for level in levels %}
                         <option {% if level.id == item.level_id %} selected {% endif %}
                                                                    value="{{ level.id }}">{{ level.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
 
-                    </select>
-                    </div>
-                {% endfor %}
             <div class="input-group">
                 <div class="input-group-prepend">
                     <label class="input-group-text" for="inputGroupSelect01">context for item</label>
@@ -42,9 +43,25 @@
             <h3 class="form-control mb-2">{{ item.post_item_context }}</h3>
         </div>
     {% endfor %}
+    <textarea class="form-control" style="height: 120px;resize: none"
+              aria-label="With textarea">
+        Type your outro text here...</textarea>
 
     <button class="btn btn-secondary">add sentence</button>
     <button class="btn btn-primary">Save</button>
+    <script>
+        function addIntro() {
+            $('.intros').append("<div class='input-group mb-3'>" +
+                "<div class='input-group-prepend'>" +
+                "<span class='input-group-text'>intro to experiment</span>" +
+                "</div>" +
+                "<textarea class='form-control' style='height: 120px;resize: none'" +
+                "aria-label='With textarea'>" +
+                "Type your intro text here..." +
+                "</textarea>" +
+                "</div>")
+        }
 
+    </script>
 
 {% endblock %}
