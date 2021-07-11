@@ -1,13 +1,21 @@
+/**
+ * uploads the file to the server
+ * @param e the file to upload
+ */
 function upload(e) {
     let file = $(e).val().split("\\").pop()
     $('.custom-file-label').addClass("selected").html(file)
 }
 
+/**
+ * craetes another field to add factors as a label and inserts it to the DOM
+ * @param add the added factor's name
+ */
 function addFactor(add) {
     $('.factor-root').append("<div class='container'>" +
         "<div class='input-group mb-3 p-3'>" +
         "<input type='text'  name='factor_name" + $('.container').length + "' class='form-control' aria-label='Default'" +
-        "aria-describedby='inputGroup-sizing-default' value='"
+        " aria-describedby='inputGroup-sizing-default' value='"
         + add.parentNode.parentNode.children.item(1).value + "' >" +
         "   <div class='input-group-append'>" +
         "<button class='btn  btn-danger p-8' type='button' " +
@@ -26,6 +34,10 @@ function addFactor(add) {
         "</div>")
 }
 
+/**
+ * inserts a level beneath the factor
+ * @param level
+ */
 function addLevel(level) {
     let factorLevels = level.parentNode.parentNode.children;
     let levelPlace = factorLevels[factorLevels.length - 1]
@@ -44,16 +56,27 @@ function addLevel(level) {
     )
 }
 
-
+/**
+ * removes the factor from the DOM with all levels
+ * @param factor
+ */
 function removeFactor(factor) {
     factor.parentNode.parentNode.parentElement.parentNode.removeChild(factor.parentNode.parentNode.parentElement)
 }
 
-
+/**
+ * removes the level textinput from the DOM
+ * @param level
+ */
 function removeLevel(level) {
     level.parentNode.parentNode.parentNode.removeChild(level.parentNode.parentNode)
 }
 
+
+/**
+ * collects the schema of the experiment
+ * @returns levels per factor
+ */
 function gatherFactors() {
     let factors = []
     for (let container of document.querySelector('.factor-root').childNodes) {
