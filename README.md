@@ -1,5 +1,5 @@
 # Research Helper
-This application helps you host design and run your own researches.
+This application helps you to host design and run your own researches.
 
 Currently this project is in early alpha. 
 Available functionalities:
@@ -7,6 +7,9 @@ Available functionalities:
 - login / logout
 - create experiment
   - set factors and levels
+- run experiment
+- list experiments of the user
+- list the items of the experiment
 
 
 # How to install
