@@ -12,16 +12,13 @@ from .models import Experiment, Item, Judgement, Level, Factor, ItemLevel
 
 
 def index(request):
+    """serves the homepage"""
     return render(request, "users/home.html")
 
 
 @login_required
-def user(request):
-    return render(request, "users/user.html")
-
-
-@login_required
 def experiments(request):
+    """lists the users experiments with item counts and times they are filled"""
     users_experiments = Experiment.objects.filter(user_id=request.user.pk)
     items_count = []
     fill_count = []
@@ -41,11 +38,13 @@ def experiments(request):
 
 @login_required
 def create_experiment(request):
+    """serves the experiment creator page"""
     return render(request, "users/create_experiment.html")
 
 
 @login_required
 def create_experiment_upload(request):
+    """receives the excel file and loads the metadata to the database"""
     schema = simplejson.loads(request.POST['schema'])
     experiment = Experiment()
     experiment.name = request.POST['experiment_name']
@@ -60,6 +59,7 @@ def create_experiment_upload(request):
 
 @login_required
 def edit_experiment(request, experiment_id):
+    """lists the items of the experiment with the factors and items it belongs to"""
     exp = Experiment.objects.get(id=experiment_id)
     items = Item.objects.filter(experiment_id=experiment_id)
     levels = Level.objects.filter(factor__experiment_id=experiment_id)
@@ -67,12 +67,14 @@ def edit_experiment(request, experiment_id):
 
 
 def view_experiment(request, experiment_id):
+    """runs the experiment as a filler - displays the intro / item"""
     experiment = Experiment.objects.get(id=experiment_id)
     first_item = Item.objects.filter(experiment_id=experiment_id).first()
     return render(request, "users/run_experiment.html", {"experiment": experiment, 'first_item': first_item})
 
 
 def view_next_experiment_item(request, experiment_id, item_id):
+    """gets the next item in the experiment to show"""
     experiment = Experiment.objects.get(id=experiment_id)
     items = Item.objects.filter(experiment_id=experiment_id)
     for elem, next_elem in pairwise(cycle(items)):
@@ -86,6 +88,7 @@ def view_next_experiment_item(request, experiment_id, item_id):
 
 @require_POST
 def submit_judgement(request):
+    """inserts the judgement of the filler to the database"""
     data = simplejson.loads(request.body)
     Judgement(judgement=data['judgement'], item_id=data['item_id']).save()
     return HttpResponse(b'success')
