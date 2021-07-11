@@ -21,3 +21,9 @@ in root folder: `>python manage.py migrate`
  the app is good to go on localhost!
  
  There is currently no deployable / production build
+ 
+ creating an experiment:
+ ![image](https://user-images.githubusercontent.com/22302671/125205144-22f3e580-e281-11eb-992f-56b3174b0052.png)
+ 
+ running an experiment:
+ ![image](https://user-images.githubusercontent.com/22302671/125205201-69e1db00-e281-11eb-821a-fcec8fc4ac46.png)
