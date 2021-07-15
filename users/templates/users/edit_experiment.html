@@ -26,7 +26,13 @@
                     <select class="custom-select" id="inputGroupSelect01">
                         {% for level in levels %}
                             {% if level.factor == factor %}
-                            <option>{{ level.name }}</option>
+                                <option
+                                        {% for il in item_levels %}
+                                            {% if level ==  il.level and item == il.item %}
+                                                selected
+                                            {% endif %}
+                                        {% endfor %}
+                                >{{ level.name }}</option>
                             {% endif %}
                         {% endfor %}
                     </select>

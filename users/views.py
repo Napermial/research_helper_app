@@ -61,10 +61,13 @@ def edit_experiment(request, experiment_id):
     """lists the items of the experiment with the factors and items it belongs to"""
     exp = Experiment.objects.get(id=experiment_id)
     items = Item.objects.filter(experiment_id=experiment_id)
+    item_level = ItemLevel.objects.filter(item__experiment_id= experiment_id)
+    print(item_level)
     factors = Factor.objects.filter(experiment_id=experiment_id)
     levels = Level.objects.filter(factor__experiment_id=experiment_id)
     return render(request, "users/edit_experiment.html", {"experiment": exp, "items": items,
-                                                          "levels": levels, "factors": factors})
+                                                          "levels": levels, "factors": factors,
+                                                          "item_levels": item_level})
 
 
 def view_experiment(request, experiment_id):
