@@ -14,24 +14,26 @@
         </textarea>
         </div>
     </div>
-    <button class="btn btn-success" onclick="addIntro()">add intro</button>
+    <button class="btn btn-success mb-4" onclick="addIntro()">add intro</button>
 
     {% for item in items %}
         <div class="mb-3">
-            <div class="input-group">
-
-                <div class="input-group-prepend">
-                    <label class="input-group-text" for="inputGroupSelect01">{{ level.factor.name }}</label>
+            {% for factor in factors %}
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="inputGroupSelect01">{{ factor.name }}</label>
+                    </div>
+                    <select class="custom-select" id="inputGroupSelect01">
+                        {% for level in levels %}
+                            {% if level.factor == factor %}
+                            <option>{{ level.name }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
                 </div>
-                <select class="custom-select" id="inputGroupSelect01">
-                    {% for level in levels %}
-                        <option {% if level.id == item.level_id %} selected {% endif %}
-                                                                   value="{{ level.id }}">{{ level.name }}</option>
-                    {% endfor %}
-                </select>
-            </div>
+            {% endfor %}
 
-            <div class="input-group">
+            <div class="input-group pt-4">
                 <div class="input-group-prepend">
                     <label class="input-group-text" for="inputGroupSelect01">context for item</label>
                 </div>

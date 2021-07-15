@@ -2,7 +2,6 @@ import simplejson
 from django.shortcuts import render
 from itertools import cycle
 from .utils import pairwise
-# Create your views here.
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
@@ -62,14 +61,16 @@ def edit_experiment(request, experiment_id):
     """lists the items of the experiment with the factors and items it belongs to"""
     exp = Experiment.objects.get(id=experiment_id)
     items = Item.objects.filter(experiment_id=experiment_id)
+    factors = Factor.objects.filter(experiment_id=experiment_id)
     levels = Level.objects.filter(factor__experiment_id=experiment_id)
-    return render(request, "users/edit_experiment.html", {"experiment": exp, "items": items, "levels": levels})
+    return render(request, "users/edit_experiment.html", {"experiment": exp, "items": items,
+                                                          "levels": levels, "factors": factors})
 
 
 def view_experiment(request, experiment_id):
     """runs the experiment as a filler - displays the intro / item"""
     experiment = Experiment.objects.get(id=experiment_id)
-    first_item = Item.objects.filter(experiment_id=experiment_id).first()
+    first_item = Item.objects.get(experiment_id=experiment_id)
     return render(request, "users/run_experiment.html", {"experiment": experiment, 'first_item': first_item})
 
 
