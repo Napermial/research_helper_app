@@ -17,9 +17,9 @@
     <button class="btn btn-success mb-4" onclick="addIntro()">add intro</button>
 
     {% for item in items %}
-        <div class="mb-3">
+        <div class="mb-4">
             {% for factor in factors %}
-                <div class="input-group">
+                <div class="input-group pt-2">
                     <div class="input-group-prepend">
                         <label class="input-group-text" for="inputGroupSelect01">{{ factor.name }}</label>
                     </div>
@@ -39,16 +39,24 @@
                 </div>
             {% endfor %}
 
-            <div class="input-group pt-4">
+            <div class="input-group pt-2">
                 <div class="input-group-prepend">
                     <label class="input-group-text" for="inputGroupSelect01">context for item</label>
                 </div>
-                <input class="form-control mb-2" value="{{ item.pre_item_context }}">
+                <input class="form-control" value="{{ item.pre_item_context }}">
             </div>
-            <h4>item</h4>
-            <input type="text" class="form-control" id="{{ item.id }}" value="{{ item.item_text }}">
-            <h4>post context for item</h4>
-            <h3 class="form-control mb-2">{{ item.post_item_context }}</h3>
+            <div class="input-group pt-2">
+                <div class="input-group-prepend">
+                    <label class="input-group-text" for="inputGroupSelect01">item</label>
+                </div>
+                <input class="form-control" id="{{ item.id }}" value="{{ item.item_text }}">
+            </div>
+            <div class="input-group pt-2 mb-4">
+                <div class="input-group-prepend">
+                    <label class="input-group-text" for="inputGroupSelect01">post context for item</label>
+                </div>
+                <input class="form-control" value="{{ item.post_item_context }}">
+            </div>
         </div>
     {% endfor %}
     <button class="btn btn-secondary">add sentence</button>

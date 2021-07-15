@@ -62,7 +62,6 @@ def edit_experiment(request, experiment_id):
     exp = Experiment.objects.get(id=experiment_id)
     items = Item.objects.filter(experiment_id=experiment_id)
     item_level = ItemLevel.objects.filter(item__experiment_id= experiment_id)
-    print(item_level)
     factors = Factor.objects.filter(experiment_id=experiment_id)
     levels = Level.objects.filter(factor__experiment_id=experiment_id)
     return render(request, "users/edit_experiment.html", {"experiment": exp, "items": items,
