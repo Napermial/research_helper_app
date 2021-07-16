@@ -7,9 +7,11 @@ Available functionalities:
 - login / logout
 - create experiment
   - set factors and levels
+  - upload an excel file with the given structure(context, stimulus, lexicalization)
 - run experiment
-- list experiments of the user
+- list experiments of the user with number of fills
 - list the items of the experiment
+- delete experiments
 
 
 # How to install
