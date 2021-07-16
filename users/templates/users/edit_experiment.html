@@ -9,8 +9,7 @@
             <div class="input-group-prepend">
                 <span class="input-group-text">intro to experiment</span>
             </div>
-            <textarea class="form-control" style="height: 120px;resize: none"
-                      aria-label="With textarea">Type your intro text here...
+            <textarea class="form-control intro" style="height: 120px;resize: none">Type your intro text here...
         </textarea>
         </div>
     </div>
@@ -69,18 +68,22 @@
         </textarea>
     </div>
 
-    <button class="btn btn-primary mt-4">Save</button>
+    <button class="btn btn-primary mt-4" onclick="saveSentences()">Save</button>
     <script>
         function addIntro() {
             $('.intros').append("<div class='input-group mb-3'>" +
                 "<div class='input-group-prepend'>" +
                 "<span class='input-group-text'>intro to experiment</span>" +
                 "</div>" +
-                "<textarea class='form-control' style='height: 120px;resize: none'" +
+                "<textarea class='form-control intro' style='height: 120px;resize: none'" +
                 "aria-label='With textarea'>" +
                 "Type your intro text here..." +
                 "</textarea>" +
                 "</div>")
+        }
+
+        function saveSentences(){
+            let intros = document.querySelectorAll('.intro')
         }
     </script>
 

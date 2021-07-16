@@ -61,7 +61,7 @@ def edit_experiment(request, experiment_id):
     """lists the items of the experiment with the factors and items it belongs to"""
     exp = Experiment.objects.get(id=experiment_id)
     items = Item.objects.filter(experiment_id=experiment_id)
-    item_level = ItemLevel.objects.filter(item__experiment_id= experiment_id)
+    item_level = ItemLevel.objects.filter(item__experiment_id=experiment_id)
     factors = Factor.objects.filter(experiment_id=experiment_id)
     levels = Level.objects.filter(factor__experiment_id=experiment_id)
     return render(request, "users/edit_experiment.html", {"experiment": exp, "items": items,
@@ -94,4 +94,12 @@ def submit_judgement(request):
     """inserts the judgement of the filler to the database"""
     data = simplejson.loads(request.body)
     Judgement(judgement=data['judgement'], item_id=data['item_id']).save()
+    return HttpResponse(b'success')
+
+
+@require_POST
+def delete_experiment(request):
+    """deletes the experiment and all items, judgements, levels and factors"""
+    data = simplejson.loads(request.body)
+    Experiment.objects.get(id=data["experiment_id"]).delete()
     return HttpResponse(b'success')

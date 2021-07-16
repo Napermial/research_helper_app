@@ -11,5 +11,7 @@ urlpatterns = [
     path('experiment/<int:experiment_id>/edit', views.edit_experiment, name="edit-experiment"),
     path('experiment/<int:experiment_id>', views.view_experiment, name="view-experiment"),
     path('experiment/<int:experiment_id>/<int:item_id>', views.view_next_experiment_item, name="nth-experiment-item"),
-    path('experiment/submit', views.submit_judgement, name='submit-judgement')
+    path('experiment/submit', views.submit_judgement, name='submit-judgement'),
+    path('experiments/delete', views.delete_experiment, name='delete-experiment')
 ]
+
