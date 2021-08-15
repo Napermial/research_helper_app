@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 
 from users import read_excel
-from .models import Experiment, Item, Judgement, Level, Factor, ItemLevel
+from .models import Experiment, Item, Judgement, Level, Factor, ItemLevel, Intro
 
 
 def index(request):
@@ -60,13 +60,15 @@ def create_experiment_upload(request):
 def edit_experiment(request, experiment_id):
     """lists the items of the experiment with the factors and items it belongs to"""
     exp = Experiment.objects.get(id=experiment_id)
+    intros = Intro.objects.filter(experiment=exp)
     items = Item.objects.filter(experiment_id=experiment_id)
     item_level = ItemLevel.objects.filter(item__experiment_id=experiment_id)
     factors = Factor.objects.filter(experiment_id=experiment_id)
     levels = Level.objects.filter(factor__experiment_id=experiment_id)
     return render(request, "users/edit_experiment.html", {"experiment": exp, "items": items,
                                                           "levels": levels, "factors": factors,
-                                                          "item_levels": item_level})
+                                                          "item_levels": item_level,
+                                                          "intros": intros})
 
 
 def view_experiment(request, experiment_id):

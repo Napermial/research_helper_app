@@ -55,6 +55,7 @@ class Judgement(models.Model):
 class Intro(models.Model):
     text = models.TextField(max_length=400)
     last = models.BooleanField()
+    experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.text

@@ -4,15 +4,30 @@
 {% block content %}
     <h2>{{ experiment.name }}</h2>
     <a href="{{ request.path|cut:'/edit' }}">link to experiment</a>
-    <div class="intros">
-        <div class="input-group mb-3">
-            <div class="input-group-prepend">
-                <span class="input-group-text">intro to experiment</span>
+    {% if intros.count == 0 %}
+        <div class="intros">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">intro to experiment</span>
+                </div>
+                <textarea class="form-control intro" style="height: 120px;resize: none">Type your intro text
+                here...
+                </textarea>
             </div>
-            <textarea class="form-control intro" style="height: 120px;resize: none">Type your intro text here...
-        </textarea>
         </div>
-    </div>
+    {% endif %}
+
+    {% for intro in intros %}
+        <div class="intros">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">intro to experiment</span>
+                </div>
+                <textarea class="form-control intro" style="height: 120px;resize: none">{{ intro.text }}
+        </textarea>
+            </div>
+        </div>
+    {% endfor %}
     <button class="btn btn-success mb-4" onclick="addIntro()">add intro</button>
 
     {% for item in items %}
@@ -82,7 +97,7 @@
                 "</div>")
         }
 
-        function saveSentences(){
+        function saveSentences() {
             let intros = document.querySelectorAll('.intro')
         }
     </script>
