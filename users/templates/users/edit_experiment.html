@@ -10,15 +10,15 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text">intro to experiment</span>
                 </div>
-                <textarea class="form-control intro" style="height: 120px;resize: none">Type your intro text
-                here...
-                </textarea>
+                <textarea class="form-control intro" style="height: 120px;resize: none" placeholder="Type your intro text here..."></textarea>
+                <button class="btn btn-danger" onclick="deleteIntro(this)">delete</button>
+                <button class="btn btn-success" >send</button>
             </div>
         </div>
     {% endif %}
 
     {% for intro in intros %}
-        <div class="intros">
+        <div class="intros" id="{{ intro.id }}">
             <div class="input-group mb-3">
                 <div class="input-group-prepend">
                     <span class="input-group-text">intro to experiment</span>
@@ -88,17 +88,26 @@
         function addIntro() {
             $('.intros').append("<div class='input-group mb-3'>" +
                 "<div class='input-group-prepend'>" +
-                "<span class='input-group-text'>intro to experiment</span>" +
+                "<span class='input-group-text' id= >intro to experiment</span>" +
                 "</div>" +
                 "<textarea class='form-control intro' style='height: 120px;resize: none'" +
                 "aria-label='With textarea'>" +
                 "Type your intro text here..." +
                 "</textarea>" +
+                "<button class='btn btn-danger' onclick='deleteIntro(this)'>delete</button>" +
                 "</div>")
         }
 
         function saveSentences() {
             let intros = document.querySelectorAll('.intro')
+        }
+
+        function deleteIntro(cnx){
+            const intro = cnx.parentNode.parentNode;
+            if(!intro.id){
+                $(cnx.parentNode.childNodes[3]).val('')
+            }
+            console.log(!intro.id);
         }
     </script>
 
