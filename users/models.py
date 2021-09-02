@@ -59,3 +59,19 @@ class Intro(models.Model):
 
     def __str__(self):
         return self.text
+
+
+class SentenceOrder(models.Model):
+    sentence_id = models.ForeignKey(Item)
+    intro_id = models.ForeignKey(Intro)
+    next_sentence = models.ForeignKey(Item)
+
+
+class SentenceOrderConfiguration(models.Model):
+    experiment = models.ForeignKey(Experiment)
+    user = models.ForeignKey(User)
+    configuration_name = models.TextField(max_length=200)
+    first_sentence = models.ForeignKey(SentenceOrder)
+
+    def __str__(self):
+        return self.configuration_name
