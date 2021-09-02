@@ -2,5 +2,47 @@
 {% block title %}{% endblock %}
 {% block navbar %}{{ block.super }}{% endblock %}
 {% block content %}
+    <a href="{{ request.path| cut:'/reorder'  }}">edit the experiment</a>
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <label class="input-group-text" for="inputGroupSelect01">Order of items</label>
+        </div>
+        <select class="custom-select" id="inputGroupSelect01">
+            <option selected>Choose...</option>
+            <option value="1">Latin</option>
+            <option value="2">Custom 1</option>
+            <option value="3">Custom 2</option>
+        </select>
+    </div>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            {% for factor in factors %}
+                <th scope="col">{{ factor.name }}</th>
+            {% endfor %}
+            <th scope="col">Item</th>
+        </tr>
+        </thead>
+    <tbody>
+    {% for item in items %}
+        <tr>
+        <td>{{ forloop.counter }}</td>
+            {% for factor in factors %}
+                {% for level in levels %}
+                    {% if level.factor == factor %}
+                        {% for il in item_levels %}
+                            {% if il.level == level and item == il.item %}
+                            <td>{{ il.level }}</td>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
 
+                {% endfor %}
+            {% endfor %}
+        <td>{{ item.item_text }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+    </table>
 {% endblock %}

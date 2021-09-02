@@ -3,7 +3,10 @@
 {% block navbar %}{{ block.super }}{% endblock %}
 {% block content %}
     <h2>{{ experiment.name }}</h2>
-    <a href="{{ request.path|cut:'/edit' }}">link to experiment</a>
+    <div>
+        <a href="{{ request.path|cut:'/edit' }}">link to experiment</a>
+    </div>
+    <a href="{{ request.path| cut:'/edit'  }}/reorder">decide the order of the sentences</a>
     {% if intros.count == 0 %}
         <div class="intros">
             <div class="input-group mb-3">

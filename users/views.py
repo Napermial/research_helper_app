@@ -93,7 +93,16 @@ def view_next_experiment_item(request, experiment_id, item_id):
 
 def order_items(request, experiment_id):
     """lets the user choose from the default orders and change sentences"""
-    return render(request, "users/order_experiments.html")
+    exp = Experiment.objects.get(id=experiment_id)
+    intros = Intro.objects.filter(experiment=exp)
+    items = Item.objects.filter(experiment_id=experiment_id)
+    item_level = ItemLevel.objects.filter(item__experiment_id=experiment_id)
+    factors = Factor.objects.filter(experiment_id=experiment_id)
+    levels = Level.objects.filter(factor__experiment_id=experiment_id)
+    return render(request, "users/order_experiments.html",{"experiment": exp, "items": items,
+                                                          "levels": levels, "factors": factors,
+                                                          "item_levels": item_level,
+                                                          "intros": intros})
 
 
 @require_POST
