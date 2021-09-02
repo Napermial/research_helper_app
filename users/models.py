@@ -62,9 +62,9 @@ class Intro(models.Model):
 
 
 class SentenceOrder(models.Model):
-    sentence_id = models.ForeignKey(Item, on_delete=models.CASCADE)
+    sentence_id = models.ForeignKey(Item, on_delete=models.CASCADE, related_name='current_sentence')
     intro_id = models.ForeignKey(Intro, on_delete=models.CASCADE)
-    next_sentence = models.ForeignKey(Item, on_delete=models.CASCADE)
+    next_sentence = models.ForeignKey(Item, on_delete=models.CASCADE, related_name='next_sentence')
 
 
 class SentenceOrderConfiguration(models.Model):

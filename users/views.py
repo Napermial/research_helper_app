@@ -91,6 +91,11 @@ def view_next_experiment_item(request, experiment_id, item_id):
     return render(request, "users/run_experiment.html", {"experiment": experiment, 'item': item})
 
 
+def order_items(request, experiment_id):
+    """lets the user choose from the default orders and change sentences"""
+    return render(request, "users/order_experiments.html")
+
+
 @require_POST
 def submit_judgement(request):
     """inserts the judgement of the filler to the database"""
