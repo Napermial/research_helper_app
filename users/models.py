@@ -62,16 +62,16 @@ class Intro(models.Model):
 
 
 class SentenceOrder(models.Model):
-    sentence_id = models.ForeignKey(Item)
-    intro_id = models.ForeignKey(Intro)
-    next_sentence = models.ForeignKey(Item)
+    sentence_id = models.ForeignKey(Item, on_delete=models.CASCADE)
+    intro_id = models.ForeignKey(Intro, on_delete=models.CASCADE)
+    next_sentence = models.ForeignKey(Item, on_delete=models.CASCADE)
 
 
 class SentenceOrderConfiguration(models.Model):
-    experiment = models.ForeignKey(Experiment)
-    user = models.ForeignKey(User)
+    experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     configuration_name = models.TextField(max_length=200)
-    first_sentence = models.ForeignKey(SentenceOrder)
+    first_sentence = models.ForeignKey(SentenceOrder, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.configuration_name
