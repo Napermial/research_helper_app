@@ -2,7 +2,7 @@
 {% block title %}{% endblock %}
 {% block navbar %}{{ block.super }}{% endblock %}
 {% block content %}
-    <a href="{{ request.path| cut:'/reorder'  }}">edit the experiment</a>
+    <a href="{{ request.path| cut:'/reorder'  }}/edit">edit the experiment</a>
     <div class="input-group mb-3">
         <div class="input-group-prepend">
             <label class="input-group-text" for="inputGroupSelect01">Order of items</label>
@@ -33,7 +33,7 @@
                     {% if level.factor == factor %}
                         {% for il in item_levels %}
                             {% if il.level == level and item == il.item %}
-                            <td>{{ il.level }}</td>
+                            <td onclick="selectItem(this)">{{ il.level }}</td>
                             {% endif %}
                         {% endfor %}
                     {% endif %}
@@ -45,4 +45,20 @@
     {% endfor %}
     </tbody>
     </table>
+    <button class="btn btn-success">save this order</button>
+    <script>
+        function selectItem(cnx){
+
+            if (cnx.parentNode.classList.contains('bg-success')){
+                cnx.parentNode.classList.remove('bg-success')
+            }else {
+                $(cnx.parentNode).addClass("bg-success")
+            }
+
+            if(document.querySelectorAll(".bg-success").length === 2){
+                alert("2 selected - swap?")
+            }
+
+        }
+    </script>
 {% endblock %}
