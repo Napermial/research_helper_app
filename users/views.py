@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 
 from users import read_excel
-from .models import Experiment, Item, Judgement, Level, Factor, ItemLevel, Intro
+from .models import Experiment, Item, Judgement, Level, Factor, ItemLevel, Intro, SentenceOrder, SentenceOrderConfiguration
 
 
 def index(request):
@@ -119,3 +119,21 @@ def delete_experiment(request):
     data = simplejson.loads(request.body)
     Experiment.objects.get(id=data["experiment_id"]).delete()
     return HttpResponse(b'success')
+
+@require_POST
+@login_required
+def save_item_order(request, experiment_id):
+    """gets a list of items and creates an order config from it"""
+    data = simplejson.loads(request.body)
+    conf_name = data[0]
+    configuration = SentenceOrderConfiguration(configuration_name=conf_name, experiment_id=experiment_id,
+                                               user=request.user.pk)
+    for i, item in enumerate(data[1:-1]):
+        if i == 0:
+            configuration.first_sentence_id = item
+            configuration.save()
+        SentenceOrder(sentence_id=item, next_sentence_id=data[i+1]).save()
+    return HttpResponse(b'success')
+
+
+

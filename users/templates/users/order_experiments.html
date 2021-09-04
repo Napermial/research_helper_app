@@ -37,12 +37,14 @@
 
                     {% endfor %}
                 {% endfor %}
-                <td>{{ item.item_text }}</td>
+                <td class="item" id="{{ item.id }}" >{{ item.item_text }}</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
-    <button class="btn btn-success">save this order</button>
+    <input name="order-conf-name" class="input-sm  mb-3">
+    <br>
+    <button class="btn btn-success" onclick="saveOrder()">save this order</button>
     <script>
 
         function selectItem(cnx) {
@@ -51,28 +53,34 @@
             } else {
                 $(cnx.parentNode).addClass("bg-success")
             }
-
             if (document.querySelectorAll(".bg-success").length === 2) {
                 if (confirm("2 selected - swap?")) {
                     let secondTr = cnx.parentNode;
-                    let secondPosition = cnx.parentNode.rowIndex-1;
+                    let secondPosition = cnx.parentNode.rowIndex - 1;
                     let firstTr = document.querySelector(".bg-success");
                     let cloneOfFirstTr = $(firstTr).clone()
-                    if (secondPosition === 0){
+                    if (secondPosition === 0) {
                         secondTr = document.querySelectorAll(".bg-success")[1]
                         secondPosition = secondTr.rowIndex - 1
                         document.querySelector('tbody').insertBefore(secondTr, firstTr)
                         firstTr.remove();
-                    }else {
+                    } else {
                         firstTr.replaceWith(secondTr);
-
                     }
                     cloneOfFirstTr.insertBefore($(document.querySelectorAll("tbody > tr")[secondPosition]))
-
-
                 }
             }
+        }
 
+        function saveOrder(){
+            let items = document.querySelectorAll(".item");
+            let prepare = []
+            prepare.push(document.querySelector("body > div > input").value)
+            for (let item of items){
+                prepare.push(item.id)
+            }
+            let stringified = JSON.stringify(prepare)
+            fetch()
         }
     </script>
 {% endblock %}
