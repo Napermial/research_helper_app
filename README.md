@@ -29,3 +29,7 @@ in root folder: `>python manage.py migrate`
  
  running an experiment:
  ![image](https://user-images.githubusercontent.com/22302671/125205201-69e1db00-e281-11eb-821a-fcec8fc4ac46.png)
+ 
+ reordering the experiment items
+ ![image](https://user-images.githubusercontent.com/22302671/132323163-f3635516-8bf3-4751-ba06-9c07ea2c9f75.png)
+
