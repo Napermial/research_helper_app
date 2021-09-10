@@ -33,16 +33,16 @@
     <button class="btn btn-success mb-4" onclick="addIntro()">add intro</button>
 
     {% for item in items %}
-        <div class="mb-4">
+        <div id="{{ item.id }}" class="mb-4">
             {% for factor in factors %}
                 <div class="input-group pt-2">
                     <div class="input-group-prepend">
                         <label class="input-group-text" for="inputGroupSelect01">{{ factor.name }}</label>
                     </div>
-                    <select class="custom-select" id="inputGroupSelect01">
+                    <select class="custom-select" id="inputGroupSelect01" onchange="submitLevelChange(this)">
                         {% for level in levels %}
                             {% if level.factor == factor %}
-                                <option
+                                <option id="{{ level.id }}"
                                         {% for il in item_levels %}
                                             {% if level ==  il.level and item == il.item %}
                                                 selected
@@ -115,6 +115,10 @@
                     $(cnx.parentNode.childNodes[3]).val('')
                 }
             }
+        }
+
+        function submitLevelChange(){
+
         }
     </script>
 

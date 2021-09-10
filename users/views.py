@@ -7,7 +7,8 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 
 from users import read_excel
-from .models import Experiment, Item, Judgement, Level, Factor, ItemLevel, Intro, SentenceOrder, SentenceOrderConfiguration
+from .models import Experiment, Item, Judgement, Level, Factor, ItemLevel, Intro, SentenceOrder, \
+    SentenceOrderConfiguration
 
 
 def index(request):
@@ -99,10 +100,10 @@ def order_items(request, experiment_id):
     item_level = ItemLevel.objects.filter(item__experiment_id=experiment_id)
     factors = Factor.objects.filter(experiment_id=experiment_id)
     levels = Level.objects.filter(factor__experiment_id=experiment_id)
-    return render(request, "users/order_experiments.html",{"experiment": exp, "items": items,
-                                                          "levels": levels, "factors": factors,
-                                                          "item_levels": item_level,
-                                                          "intros": intros})
+    return render(request, "users/order_experiments.html", {"experiment": exp, "items": items,
+                                                            "levels": levels, "factors": factors,
+                                                            "item_levels": item_level,
+                                                            "intros": intros})
 
 
 @require_POST
@@ -120,6 +121,7 @@ def delete_experiment(request):
     Experiment.objects.get(id=data["experiment_id"]).delete()
     return HttpResponse(b'success')
 
+
 @require_POST
 @login_required
 def save_item_order(request, experiment_id):
@@ -132,8 +134,12 @@ def save_item_order(request, experiment_id):
         if i == 0:
             configuration.first_sentence_id = item
             configuration.save()
-        SentenceOrder(sentence_id=item, next_sentence_id=data[i+1]).save()
+        SentenceOrder(sentence_id=item, next_sentence_id=data[i + 1]).save()
     return HttpResponse(b'success')
 
 
-
+@require_POST
+@login_required
+def save_changed_level(request, experiment_id):
+    """changes the item of the experiment with the level given"""
+    Item.objects.get(request.body[""])
