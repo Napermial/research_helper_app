@@ -140,6 +140,10 @@ def save_item_order(request, experiment_id):
 
 @require_POST
 @login_required
-def save_changed_level(request, experiment_id):
+def save_changed_level(request):
     """changes the item of the experiment with the level given"""
-    Item.objects.get(request.body[""])
+    data = simplejson.loads(request.body)
+    item_level = ItemLevel.objects.get(item_id=data["itemId"], level_id=data["previousLevel"])
+    item_level.level = Level.objects.get(id=data["newLevel"])
+    item_level.save()
+    return HttpResponse()
