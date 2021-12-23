@@ -39,7 +39,7 @@
                     <div class="input-group-prepend">
                         <label class="input-group-text" for="inputGroupSelect01">{{ factor.name }}</label>
                     </div>
-                    <select class="custom-select" id="inputGroupSelect01" onchange="submitLevelChange(this)">
+                    <select class="custom-select"  onchange="submitLevelChange(this)">
                         {% for level in levels %}
                             {% if level.factor == factor %}
                                 <option id="{{ level.id }}"
@@ -104,9 +104,6 @@
         }
 
         function deleteIntro(cnx){
-            console.log(cnx);
-            console.log(cnx.parentNode);
-            console.log(cnx.parentNode.childNodes);
             let intro = cnx.parentNode;
             if(!intro.id){
                 if (cnx.parentNode.childNodes[3].value === ''){
@@ -117,8 +114,10 @@
             }
         }
 
-        function submitLevelChange(){
+        function submitLevelChange(cnx){
+            fetch(url="/level-change", data={
 
+            })
         }
     </script>
 

@@ -15,6 +15,7 @@ urlpatterns = [
     path('experiment/<int:experiment_id>/<int:item_id>', views.view_next_experiment_item, name="nth-experiment-item"),
     path('experiment/submit', views.submit_judgement, name='submit-judgement'),
     path('experiments/delete', views.delete_experiment, name='delete-experiment'),
-    path('experiment/<int:experiment_id>/reorder', views.order_items,name='order-items')
+    path('experiment/<int:experiment_id>/reorder', views.order_items,name='order-items'),
+    path("level-change", views.save_changed_level)
 ]
 

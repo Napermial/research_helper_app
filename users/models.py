@@ -4,7 +4,6 @@ from django.contrib.auth.models import User
 
 class Experiment(models.Model):
     name = models.TextField()
-    intro_text = models.TextField(null=True)
     creation_date = models.DateTimeField(auto_now_add=True)
     user_id = models.ForeignKey(User, null=True, on_delete=models.PROTECT)
 
@@ -44,14 +43,6 @@ class ItemLevel(models.Model):
     level = models.ForeignKey(Level, on_delete=models.CASCADE)
 
 
-class Judgement(models.Model):
-    item = models.ForeignKey(Item, on_delete=models.CASCADE, null=True)
-    judgement = models.FloatField()
-
-    def __str__(self):
-        return self.judgement
-
-
 class Intro(models.Model):
     text = models.TextField(max_length=400)
     last = models.BooleanField()
@@ -75,3 +66,12 @@ class SentenceOrderConfiguration(models.Model):
 
     def __str__(self):
         return self.configuration_name
+
+
+class Judgement(models.Model):
+    item = models.ForeignKey(Item, on_delete=models.CASCADE, null=True)
+    sentence_order_configuration = models.ForeignKey(SentenceOrderConfiguration, on_delete=models.CASCADE, null=True)
+    judgement = models.FloatField()
+
+    def __str__(self):
+        return self.judgement
