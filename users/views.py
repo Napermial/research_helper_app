@@ -1,7 +1,7 @@
 import simplejson
 from django.shortcuts import render
 from itertools import cycle
-from .utils import pairwise
+from .utils import pairwise, jwt_get_username_from_payload_handler, jwt_decode_token, get_user_from_token
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
@@ -11,7 +11,7 @@ import jwt
 
 from django.http import JsonResponse
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 
 from users import read_excel
 from .models import Experiment, Item, Judgement, Level, Factor, ItemLevel, Intro, SentenceOrder, \
@@ -20,13 +20,18 @@ from .models import Experiment, Item, Judgement, Level, Factor, ItemLevel, Intro
 
 def index(request):
     """serves the homepage"""
-    return render(request, "users/home.html")
+    return JsonResponse({"message": "hello"})
 
 
-@login_required
+@permission_classes([IsAuthenticated])
 def experiments(request):
     """lists the users experiments with item counts and times they are filled"""
-    users_experiments = Experiment.objects.filter(user_id=request.user.pk)
+    token = request.headers.get('Authorization')
+    if token is None:
+        return HttpResponse("You need to log in to access this resource", status=403)
+    decoded = jwt_decode_token(token.replace("Bearer ", ""))
+    user = get_user_from_token(decoded)
+    users_experiments = Experiment.objects.filter(user_id=user.pk)
     items_count = []
     fill_count = []
     for experiment in users_experiments:
@@ -39,8 +44,10 @@ def experiments(request):
             for item in Item.objects.filter(experiment_id=experiment.id):
                 fill += Judgement.objects.filter(item_id=item.id).count()
             fill_count.append(fill)
-    experiments_zipped = zip(users_experiments, items_count, fill_count)
-    return HttpResponse()
+    json_experiments = {}
+    for experiment, item, fill in zip(users_experiments, items_count, fill_count):
+        json_experiments[experiment] = [item, fill]
+    return JsonResponse(json_experiments)
 
 
 @login_required
