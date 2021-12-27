@@ -4,7 +4,7 @@ from itertools import cycle
 from .utils import pairwise, jwt_decode_token, get_user_from_token
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_POST, require_http_methods
 
 from functools import wraps
 import jwt
@@ -86,6 +86,32 @@ def one_experiment(request, experiment_id):
         })
     return JsonResponse({"items": all_items,
                          "intros": all_intros})
+
+
+@require_http_methods(["DELETE"])
+@permission_classes([IsAuthenticated])
+def delete_experiment(request, experiment_id):
+    if len(Experiment.objects.filter(id=experiment_id)) < 1:
+        return HttpResponse("No such experiment", status=404)
+    Experiment.objects.get(id=experiment_id).delete()
+    return HttpResponse(status=200)
+
+
+@require_http_methods(["PUT"])
+@permission_classes([IsAuthenticated])
+def update_item(request, experiment_id, item_id):
+    if len(Item.objects.filter(item_id=item_id)) < 1:
+        return HttpResponse(status=404)
+    updated = request.body
+    item = Item.objects.get(item_id=item_id)
+    item.pre_item_context = updated["preItemContext"]
+    item.item_text = updated["itemText"]
+    item.post_item_context = updated["postItemContext"]
+    item.save()
+    item_level = ItemLevel.objects.get(item_id=item.id)
+    item_level.level = updated["levelId"]
+    item_level.save()
+    return HttpResponse(status=200)
 
 
 @login_required
