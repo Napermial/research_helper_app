@@ -13,7 +13,7 @@ class Experiment(models.Model):
 
 class Factor(models.Model):
     name = models.TextField()
-    experiment_id = models.ForeignKey(Experiment, null=True, on_delete=models.CASCADE)
+    experiment_id = models.ForeignKey(Experiment, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
@@ -22,6 +22,7 @@ class Factor(models.Model):
 class Level(models.Model):
     name = models.TextField()
     factor = models.ForeignKey(Factor, on_delete=models.CASCADE)
+    experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
@@ -41,6 +42,7 @@ class Item(models.Model):
 class ItemLevel(models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
     level = models.ForeignKey(Level, on_delete=models.CASCADE)
+    experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE)
 
 
 class Intro(models.Model):
@@ -52,20 +54,19 @@ class Intro(models.Model):
         return self.text
 
 
-class SentenceOrder(models.Model):
-    sentence_id = models.ForeignKey(Item, on_delete=models.CASCADE, related_name='current_sentence')
-    intro_id = models.ForeignKey(Intro, on_delete=models.CASCADE)
-    next_sentence = models.ForeignKey(Item, on_delete=models.CASCADE, related_name='next_sentence')
-
-
 class SentenceOrderConfiguration(models.Model):
     experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     configuration_name = models.TextField(max_length=200)
-    first_sentence = models.ForeignKey(SentenceOrder, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return self.configuration_name
+
+
+class SentenceOrder(models.Model):
+    sentence_id = models.ForeignKey(Item, on_delete=models.CASCADE, null=True, related_name='current_sentence')
+    intro_id = models.ForeignKey(Intro, on_delete=models.CASCADE, null=True)
+    configuration = models.ForeignKey(SentenceOrderConfiguration, on_delete=models.CASCADE)
 
 
 class Judgement(models.Model):

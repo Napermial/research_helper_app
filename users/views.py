@@ -1,8 +1,8 @@
 import simplejson
 from django.shortcuts import render
 from itertools import cycle
-from .utils import pairwise, jwt_get_username_from_payload_handler, jwt_decode_token, get_user_from_token
-from django.http import HttpResponseRedirect, HttpResponse
+from .utils import pairwise, jwt_decode_token, get_user_from_token
+from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 
@@ -44,16 +44,48 @@ def experiments(request):
             for item in Item.objects.filter(experiment_id=experiment.id):
                 fill += Judgement.objects.filter(item_id=item.id).count()
             fill_count.append(fill)
-    json_experiments = {}
+    json_experiments = []
     for experiment, item, fill in zip(users_experiments, items_count, fill_count):
-        json_experiments[experiment] = [item, fill]
-    return JsonResponse(json_experiments)
+        json_experiments.append({"name": experiment.name, "id": experiment.id, "items": item, "fills": fill})
+    return JsonResponse({"data": json_experiments})
 
 
-@login_required
-def create_experiment(request):
-    """serves the experiment creator page"""
-    return render(request, "users/create_experiment.html")
+@permission_classes([IsAuthenticated])
+def one_experiment(request, experiment_id):
+    if len(Experiment.objects.filter(id=experiment_id)) < 1:
+        return HttpResponse("No such experiment", status=404)
+    exp = Experiment.objects.get(id=experiment_id)
+    intros = Intro.objects.filter(experiment=exp)
+    order_configuration = SentenceOrderConfiguration.objects.filter(experiment_id=experiment_id).first()
+    orders = SentenceOrder.objects.filter(configuration=order_configuration)
+    items = Item.objects.filter(experiment_id=experiment_id)
+    levels = Level.objects.filter(experiment_id=experiment_id).values()
+    factors = Factor.objects.filter(experiment_id=experiment_id).values()
+    item_levels = ItemLevel.objects.filter(experiment_id=experiment_id).values()
+    all_items, all_intros = [], []
+    for item in items:
+        current_itemlevel = item_levels.get(item=item.id)
+        current_level = levels.get(id=current_itemlevel["level_id"])
+        current_factor = factors.get(id=current_level["factor_id"])
+
+        all_items.append({"preItemContext": item.pre_item_context,
+                          "itemText": item.item_text,
+                          "postItemContext": item.post_item_context,
+                          "levelId": current_level["id"],
+                          "levelName": current_level["name"],
+                          "factorId": current_factor["id"],
+                          "factorName": current_factor["name"],
+                          "itemOrder": orders.get(sentence_id=item.id).id
+                          })
+    for intro in intros:
+        all_intros.append({
+            "introId": intro.id,
+            "introText": intro.text,
+            "isOutro": intro.last,
+            "introOrder": orders.get(intro_id=intro.id).id
+        })
+    return JsonResponse({"items": all_items,
+                         "intros": all_intros})
 
 
 @login_required
@@ -68,22 +100,7 @@ def create_experiment_upload(request):
     levels = read_excel.insert_factors(schema, experiment)
     file_read, factor_positions = read_excel.read_file(file[0])
     read_excel.put_into_db(file_read, levels, experiment)
-    return HttpResponseRedirect(f'/experiment/{experiment.pk}/edit')
-
-
-@login_required
-def edit_experiment(request, experiment_id):
-    """lists the items of the experiment with the factors and items it belongs to"""
-    exp = Experiment.objects.get(id=experiment_id)
-    intros = Intro.objects.filter(experiment=exp)
-    items = Item.objects.filter(experiment_id=experiment_id)
-    item_level = ItemLevel.objects.filter(item__experiment_id=experiment_id)
-    factors = Factor.objects.filter(experiment_id=experiment_id)
-    levels = Level.objects.filter(factor__experiment_id=experiment_id)
-    return render(request, "users/edit_experiment.html", {"experiment": exp, "items": items,
-                                                          "levels": levels, "factors": factors,
-                                                          "item_levels": item_level,
-                                                          "intros": intros})
+    return None
 
 
 def view_experiment(request, experiment_id):
@@ -104,20 +121,6 @@ def view_next_experiment_item(request, experiment_id, item_id):
     else:
         item = {}
     return render(request, "users/run_experiment.html", {"experiment": experiment, 'item': item})
-
-
-def order_items(request, experiment_id):
-    """lets the user choose from the default orders and change sentences"""
-    exp = Experiment.objects.get(id=experiment_id)
-    intros = Intro.objects.filter(experiment=exp)
-    items = Item.objects.filter(experiment_id=experiment_id)
-    item_level = ItemLevel.objects.filter(item__experiment_id=experiment_id)
-    factors = Factor.objects.filter(experiment_id=experiment_id)
-    levels = Level.objects.filter(factor__experiment_id=experiment_id)
-    return render(request, "users/order_experiments.html", {"experiment": exp, "items": items,
-                                                            "levels": levels, "factors": factors,
-                                                            "item_levels": item_level,
-                                                            "intros": intros})
 
 
 @require_POST
